@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Bicicletas</title>
+    <!-- Importación de Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Enlace a archivo CSS externo -->
+    <link rel="stylesheet" href="/frontend/static/vista_catalogo.css">
+    <link rel="stylesheet" href="/frontend/static/header_footer.css">
+    <link rel="stylesheet" href="/frontend/static/modals.css">
+</head>
+<body>
+
+     <!-- Contenedor para el Header y Nav -->
+  <div id="header-container"></div>
+
+    <!-- Contenedor principal del header -->
+    <!-- <div id="top-container">         -->
+        <!-- Header con logo, barra de búsqueda e íconos -->
+        <!-- <header>
+            <img class="logo" src="/frontend/img/bike_logo.svg" alt="BikeStore">
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar productos...">
+            </div>
+            <div class="icon1">
+                <div class="icon cart-icon">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="badge" id="cart-badge">0</span>
+                </div>            
+                <div class="icon" id="loginIcon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="icon" id="favoritesIcon">
+                    <i class="fa-solid fa-heart"></i>
+                    <span class="badge">0</span>
+                </div>
+            </div>
+        </header>
+        
+        Menú de navegación principal -->
+        <!-- <nav class="nav-menu">
+            <ul>
+                <li><a href="#">Inicio</a></li>
+                <li><a href="/catalogo.html">Catálogo</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul>
+        </nav>
+    </div> -->
+
+    <div class="container">
+        <!-- Ruta de navegación (breadcrumb) -->
+        <div class="breadcrumb">
+            <a href="#">Inicio</a>
+            <span>/</span>
+            <a href="#">Bicicletas</a>
+            <span>/</span>
+            <span id="product-name">Bicicleta de Ruta</span>
+        </div>
+
+        <!-- Contenedor principal del producto -->
+        <div class="product-container">
+            <!-- Sección de imágenes del producto -->
+            <div class="product-images">
+                <img src="/frontend/img/bici1.jpeg" alt="Bicicleta de Ruta" class="main-image" id="main-product-image">
+                <div class="thumbnail-container">
+                    <img src="/frontend/img/bici1.jpeg" alt="Thumbnail 1" class="thumbnail active" data-src="img/bici1.jpeg">
+                    <img src="/frontend/img/bici2.jpeg" alt="Thumbnail 2" class="thumbnail" data-src="/frontend/img/bici2.jpeg">
+                    <img src="/frontend/img/bici3.jpeg" alt="Thumbnail 3" class="thumbnail" data-src="/frontend/img/bici3.jpeg">
+                    <img src="/frontend/img/bici4.jpeg" alt="Thumbnail 4" class="thumbnail" data-src="/frontend/img/bici4.jpeg">
+                </div>
+            </div>
+
+            <!-- Sección de información del producto -->
+            <div class="product-info">
+                <!-- Título, marca y SKU -->
+                <div>
+                    <h1 class="product-title" id="product-title">Bicicleta KSW MTB 29" 24V - Bicicleta de Montaña</h1>
+                    <p class="product-brand">Marca: <span id="product-brand">KSW</span></p>
+                    <p class="product-sku">SKU: <span id="product-sku">5319987</span></p>
+                    
+                    <!-- Sistema de calificación con estrellas -->
+                    <div class="rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">☆</span>
+                        <span class="reviews-count">(48 reseñas)</span>
+                    </div>
+                </div>
+
+                <!-- Precio y promoción -->
+                <div>
+                    <p class="product-price" id="product-price">$1.425.000</p>
+                    <p class="product-sale">Los descuentos de <span>Hot Sale</span> solo aplica para compra en Página Web.</p>
+                </div>
+
+                <!-- Opciones de color -->
+                <div class="product-colors">
+                    <span class="color-title">COLOR: <span id="selected-color">FU</span></span>
+                    <div class="color-options">
+                        <div class="color-option active" data-color="Fucsia">
+                            <div class="color-icon" style="background-color: #FF00FF;"></div> <!-- Fucsia -->
+                        </div>
+                        <div class="color-option" data-color="Blanco">
+                            <div class="color-icon" style="background-color: #FFFFFF; border: 1px solid #ccc;"></div> <!-- Blanco -->
+                        </div>
+                        <div class="color-option" data-color="Naranja">
+                            <div class="color-icon" style="background-color: #ff8800;"></div> <!-- Naranja -->
+                        </div>
+                        <div class="color-option" data-color="Rojo">
+                            <div class="color-icon" style="background-color: #FF0000;"></div> <!-- Rojo -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opciones de talla -->
+                <div class="product-sizes">
+                    <span class="size-title">TALLAS: <span id="selected-size">S</span></span>
+                    <div class="size-options">
+                        <div class="size-option" data-size="XS">XS</div>
+                        <div class="size-option active" data-size="S">S</div>
+                        <div class="size-option" data-size="M">M</div>
+                        <div class="size-option" data-size="L">L</div>
+                    </div>
+                </div>
+
+                <!-- Control de cantidad y botones de acción -->
+                <div class="quantity-section">
+                    <div class="quantity-control">
+                        <button class="quantity-btn decrease-btn">-</button>
+                        <input type="text" class="quantity-display" value="1" readonly>
+                        <button class="quantity-btn increase-btn">+</button>
+                    </div>
+                    <button class="add-to-cart">Agregar al carrito</button>
+                    <button class="buy-now">Comprar ahora</button>
+                    <button class="wishlist-btn"><i class="fa-regular fa-heart" style="color: #0d0d0d;"></i></button>
+                </div>
+                
+<!-- Sección de promociones y descripción -->
+<div class="product-promotions">
+    <h3>KSW MTB 29" 24V - Bicicleta de Montaña</h3>
+    <div class="product-description">
+        <p>La KSW MTB 29" 24V es una bicicleta de montaña diseñada para ciclistas que buscan resistencia, control y rendimiento en terrenos exigentes. Su cuadro de aluminio ligero y su suspensión delantera brindan estabilidad y comodidad en cada ruta.</p>
+    </div>
+    <p class="product-specs">Los precios y especificaciones técnicas pueden cambiar sin previo aviso*</p>
+
+    <!-- Tabla de especificaciones -->
+    <table class="product-specs-table">
+        <thead>
+            <tr>
+                <th>Componente</th>
+                <th>Referencia</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Cuadro</td>
+                <td>Aluminio 29", cableado interno</td>
+            </tr>
+            <tr>
+                <td>Suspensión</td>
+                <td>Suspensión delantera con bloqueo</td>
+            </tr>
+            <tr>
+                <td>Rines</td>
+                <td>Doble pared en aluminio</td>
+            </tr>
+            <tr>
+                <td>Llantas</td>
+                <td>29" x 2.10, diseño todoterreno</td>
+            </tr>
+            <tr>
+                <td>Manillar</td>
+                <td>Aluminio 720mm</td>
+            </tr>
+            <tr>
+                <td>Plato y bielas</td>
+                <td>3 platos, bielas de 170mm</td>
+            </tr>
+            <tr>
+                <td>Desviador</td>
+                <td>Shimano Tourney 3x8V</td>
+            </tr>
+            <tr>
+                <td>Cambios</td>
+                <td>Shimano Tourney TX800 8V</td>
+            </tr>
+            <tr>
+                <td>Frenos</td>
+                <td>Disco mecánico</td>
+            </tr>
+            <tr>
+                <td>Cassette</td>
+                <td>8 velocidades, 11-32T</td>
+            </tr>
+            <tr>
+                <td>Pedales</td>
+                <td>Aluminio estándar</td>
+            </tr>
+            <tr>
+                <td>Cadena</td>
+                <td>KMC 8 velocidades</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h4>Beneficios:</h4>
+    <ul>
+        <li>Cuadro ligero y resistente, ideal para rutas exigentes.</li>
+        <li>Transmisión de 24 velocidades para mayor versatilidad.</li>
+        <li>Frenos de disco mecánicos para mayor seguridad y control.</li>
+        <li>Llantas 29” para mejor agarre y estabilidad en caminos irregulares.</li>
+    </ul>
+
+    <h4>Garantía:</h4>
+    <ul>
+    <li>1 año en cuadro y horquilla por defectos de fabricación.</li>
+</ul>
+</div>
+
+                <!-- Información de contacto y garantía -->
+                <div class="contact-info">
+                    <div class="whatsapp-contact">
+                        <i class="fa-brands fa-whatsapp"></i> Atención whatsapp 3160258021
+                    </div>
+                    <div class="guarantee-info">
+                        <i class="fa-solid fa-rotate"></i> Cambios y Garantías en Todos los Productos
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notificación flotante -->
+        <div class="notification" id="notification">
+            Producto agregado al carrito
+        </div>
+    </div>
+
+    
+  <!-- Contenedor para el Footer -->
+  <div id="footer-container"></div>
+
+  <div id="modals-container"></div>
+
+</body>
+<!-- Script JavaScript -->
+<script type="module" src="/frontend/js/main.js"></script>
+</html>

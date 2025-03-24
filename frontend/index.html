@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio - BikeStore</title>
+  <link rel="stylesheet" href="/frontend/static/header_footer.css">
+  <link rel="stylesheet" href="/frontend/static/styles.css">
+  <link rel="stylesheet" href="/frontend/static/modals.css">
+  <link rel="stylesheet" href="/frontend/static/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- Contenedor para el Header y Nav -->
+  <div id="header-container"></div>
+
+  <!-- Estructura principal -->
+  <div class="container">
+    <!-- Barra lateral izquierda -->
+    <aside class="sidebar-left">
+      <div class="motivation-section">
+        <img src="/frontend/img/motivacion.png" alt="Frase Motivacional">
+        <div class="overlay">
+          <h2>¡Inspírate y Actúa!</h2>
+          <p>"El éxito es la suma de pequeños esfuerzos diarios."</p>
+        </div>
+      </div>
+    </aside>
+    
+
+    <!-- Contenido principal -->
+    <main>
+      <!-- Banner principal -->
+      <div class="main-banner">
+        <div class="banner-slides">
+          <div class="banner-slide active">
+            <img src="/frontend/img/img_slider1.jpeg" alt="Banner1" loading="lazy">
+          </div>
+          <div class="banner-slide">
+            <img src="/frontend/img/img_slider2.jpeg" alt="Banner1" loading="lazy">
+          </div>
+          <div class="banner-slide">
+            <video autoplay loop muted>
+              <source src="/frontend/img/video_slider3.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <div class="banner-nav">
+          <button class="prev-banner">←</button>
+          <button class="next-banner">→</button>
+        </div>
+      </div>
+      <div class="banner-pagination">
+        <div class="pagination-dot active"></div>
+        <div class="pagination-dot"></div>
+        <div class="pagination-dot"></div>
+      </div>
+
+
+      <!-- Categorías -->
+      <div class="categories">
+        <div class="category-card">
+          <div class="category-image">CATEGORÍA</div>
+          <h3>Ropa Deportiva</h3>
+        </div>
+        <div class="category-card">
+          <div class="category-image">CATEGORÍA</div>
+          <h3>Equipamiento</h3>
+        </div>
+        <div class="category-card">
+          <div class="category-image">CATEGORÍA</div>
+          <h3>Suplementos</h3>
+        </div>
+        <div class="category-card">
+          <div class="category-image">CATEGORÍA</div>
+          <h3>Accesorios</h3>
+        </div>
+      </div>
+
+      <!-- Productos Populares -->
+      <h2 class="popular-title">PRODUCTOS POPULARES</h2>
+      <div class="popular-products">
+        <!-- Producto 1 -->
+        <div class="product-card">
+          <div class="product-image">
+            <img src="ruta-a-imagen-bicicleta-montana.jpg" alt="Bicicleta de Montaña X100">
+          </div>
+          <h3 class="product-title">Bicicleta de Montaña X100</h3>
+          <p class="product-price">COP $2.500.000</p>
+        </div>
+        <!-- Producto 2 -->
+        <div class="product-card">
+          <div class="product-image">
+            <img src="ruta-a-imagen-bicicleta-urbana.jpg" alt="Bicicleta Urbana Z200">
+          </div>
+          <h3 class="product-title">Bicicleta Urbana Z200</h3>
+          <p class="product-price">COP $1.800.000</p>
+        </div>
+        <!-- Producto 3 -->
+        <div class="product-card">
+          <div class="product-image">
+            <img src="ruta-a-imagen-casco.jpg" alt="Casco de Bicicleta Pro">
+          </div>
+          <h3 class="product-title">Casco de Bicicleta Pro</h3>
+          <p class="product-price">COP $350.000</p>
+        </div>
+        <!-- Producto 4 -->
+        <div class="product-card">
+          <div class="product-image">
+            <img src="ruta-a-imagen-guantes.jpg" alt="Guantes de Ciclismo">
+          </div>
+          <h3 class="product-title">Guantes de Ciclismo</h3>
+          <p class="product-price">COP $120.000</p>
+        </div>
+        <!-- Producto 5 -->
+        <div class="product-card">
+          <div class="product-image">
+            <img src="ruta-a-imagen-bicicleta-carretera.jpg" alt="Bicicleta de Carretera R300">
+          </div>
+          <h3 class="product-title">Bicicleta de Carretera R300</h3>
+          <p class="product-price">COP $2.200.000</p>
+        </div>
+        <!-- Producto 6 -->
+        <div class="product-card">
+          <div class="product-image">
+            <img src="ruta-a-imagen-bicicleta-electrica.jpg" alt="Bicicleta Eléctrica E-Bike">
+          </div>
+          <h3 class="product-title">Bicicleta Eléctrica E-Bike</h3>
+          <p class="product-price">COP $3.200.000</p>
+        </div>
+        <!-- Producto 7 -->
+        <div class="product-card">
+          <div class="product-image">
+            <img src="ruta-a-imagen-bicicleta-hibrida.jpg" alt="Bicicleta Híbrida">
+          </div>
+          <h3 class="product-title">Bicicleta Híbrida</h3>
+          <p class="product-price">COP $2.800.000</p>
+        </div>
+        <!-- Producto 8 -->
+        <div class="product-card">
+          <div class="product-image">
+            <img src="ruta-a-imagen-accesorios.jpg" alt="Kit de Accesorios para Bicicleta">
+          </div>
+          <h3 class="product-title">Kit de Accesorios para Bicicleta</h3>
+          <p class="product-price">COP $450.000</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Barra lateral derecha -->
+    <aside class="sidebar-right">
+      <div class="promotion-section">
+        <img src="/frontend/img/promocion.png" alt="Promoción">
+        <div class="overlay">
+          <h2>¡Gran Promoción!</h2>
+          <p>Descuento del 30% en la nueva colección</p>
+        </div>
+      </div>
+    </aside>
+    
+  </div>
+
+  <!-- Nuevos Lanzamientos -->
+  <section class="new-releases">
+    <h2 class="section-title">NUEVOS LANZAMIENTOS</h2>
+    <div class="releases-carousel">
+      <!-- Producto 1 -->
+      <div class="release-card">
+        <div class="favorite-container">
+          <i class="favorite-icon far fa-heart"></i>
+        </div>
+        <div class="release-image">
+          <img src="ruta-a-imagen-bicicleta-electrica-plus.jpg" alt="Bicicleta Eléctrica Plus">
+        </div>
+        <div class="release-info">
+          <h3 class="release-title">Bicicleta Eléctrica Plus</h3>
+          <p class="release-price">COP $3.500.000</p>
+          <button class="release-button">Agregar al carrito</button>
+        </div>
+      </div>
+      <!-- Producto 2 -->
+      <div class="release-card">
+        <div class="favorite-container">
+          <i class="favorite-icon far fa-heart"></i>
+        </div>
+        <div class="release-image">
+          <img src="ruta-a-imagen-kit-reparacion.jpg" alt="Kit de Reparación Integral">
+        </div>
+        <div class="release-info">
+          <h3 class="release-title">Kit de Reparación Integral</h3>
+          <p class="release-price">COP $85.000</p>
+          <button class="release-button">Agregar al carrito</button>
+        </div>
+      </div>
+      <!-- Producto 3 -->
+      <div class="release-card">
+        <div class="favorite-container">
+          <i class="favorite-icon far fa-heart"></i>
+        </div>
+        <div class="release-image">
+          <img src="ruta-a-imagen-luces-led.jpg" alt="Luces LED para Bicicleta">
+        </div>
+        <div class="release-info">
+          <h3 class="release-title">Luces LED para Bicicleta</h3>
+          <p class="release-price">COP $75.000</p>
+          <button class="release-button">Agregar al carrito</button>
+        </div>
+      </div>
+      <!-- Producto 4 -->
+      <div class="release-card">
+        <div class="favorite-container">
+          <i class="favorite-icon far fa-heart"></i>
+        </div>
+        <div class="release-image">
+          <img src="ruta-a-imagen-camara-ciclismo.jpg" alt="Cámara de Acción para Ciclismo">
+        </div>
+        <div class="release-info">
+          <h3 class="release-title">Cámara de Acción para Ciclismo</h3>
+          <p class="release-price">COP $400.000</p>
+          <button class="release-button">Agregar al carrito</button>
+        </div>
+      </div>
+      <!-- Producto 5 -->
+      <div class="release-card">
+        <div class="favorite-container">
+          <i class="favorite-icon far fa-heart"></i>
+        </div>
+        <div class="release-image">
+          <img src="ruta-a-imagen-sillin.jpg" alt="Sillín Ergonómico">
+        </div>
+        <div class="release-info">
+          <h3 class="release-title">Sillín Ergonómico</h3>
+          <p class="release-price">COP $250.000</p>
+          <button class="release-button">Agregar al carrito</button>
+        </div>
+      </div>
+      <!-- Producto 6 -->
+      <div class="release-card">
+        <div class="favorite-container">
+          <i class="favorite-icon far fa-heart"></i>
+        </div>
+        <div class="release-image">
+          <img src="ruta-a-imagen-guantes-pro.jpg" alt="Guantes Pro para Ciclismo">
+        </div>
+        <div class="release-info">
+          <h3 class="release-title">Guantes Pro para Ciclismo</h3>
+          <p class="release-price">COP $150.000</p>
+          <button class="release-button">Agregar al carrito</button>
+        </div>
+      </div>
+      <!-- Producto 7 -->
+      <div class="release-card">
+        <div class="favorite-container">
+          <i class="favorite-icon far fa-heart"></i>
+        </div>
+        <div class="release-image">
+          <img src="ruta-a-imagen-bicicleta-hibrida-nueva.jpg" alt="Bicicleta Híbrida Nueva">
+        </div>
+        <div class="release-info">
+          <h3 class="release-title">Bicicleta Híbrida Nueva</h3>
+          <p class="release-price">COP $2.900.000</p>
+          <button class="release-button">Agregar al carrito</button>
+        </div>
+      </div>
+      <!-- Producto 8 -->
+      <div class="release-card">
+        <div class="favorite-container">
+          <i class="favorite-icon far fa-heart"></i>
+        </div>
+        <div class="release-image">
+          <img src="ruta-a-imagen-cascos.jpg" alt="Cascos de Ciclismo de Alta Gama">
+        </div>
+        <div class="release-info">
+          <h3 class="release-title">Cascos de Ciclismo de Alta Gama</h3>
+          <p class="release-price">COP $500.000</p>
+          <button class="release-button">Agregar al carrito</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Nuestras Marcas -->
+  <section class="our-brands">
+    <h2 class="brands-title">Nuestras Marcas</h2>
+    <div class="brands-carousel">
+        <button class="nav-arrow prev-brand">←</button>
+        <div class="brands-container">
+            <div class="brand-item">
+                <img src="/img/img_marcas/trek_marca.png" alt="Trek">
+            </div>
+            <div class="brand-item">
+                <img src="/img/img_marcas/specialized_marca.png" alt="Specialized">
+            </div>
+            <div class="brand-item">
+                <img src="/img/img_marcas/giant_marca.png" alt="Giant">
+            </div>
+            <div class="brand-item">
+                <img src="/img/img_marcas/cannondale_marca.png" alt="Cannondale">
+            </div>
+            <div class="brand-item">
+                <img src="/img/img_marcas/scott_marca.png" alt="Scott">
+            </div>
+            <div class="brand-item">
+                <img src="/img/img_marcas/orbea_marca.png" alt="Orbea">
+            </div>
+        </div>
+        <button class="nav-arrow next-brand">→</button>
+    </div>
+</section>
+
+
+  <!-- Contenedor para el Footer -->
+  <div id="footer-container"></div>
+
+  <div id="modals-container"></div>
+
+</body>
+<script type="module" src="/frontend/js/main.js"></script>
+</html>

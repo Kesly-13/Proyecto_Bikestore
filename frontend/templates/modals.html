@@ -1,0 +1,102 @@
+<!-- modals.html -->
+
+<!-- Modal de Login (contenido tomado de login.html) -->
+<div class="login-modal" id="loginModal" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="login-content">
+      <span class="close-button" tabindex="0">&times;</span>
+      
+      <!-- Sign In Form -->
+      <div class="login-container" id="signIn">
+        <h1 class="form-title">Acceder</h1>
+        <form id="loginForm">
+          <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" name="email" id="signInEmail" placeholder="Email" required>
+            <label for="signInEmail">Email</label>
+          </div>
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="password" id="signInPassword" placeholder="Password" required>
+            <label for="signInPassword">Contraseña</label>
+          </div>
+          <p class="recover">
+            <a href="#">Recuperar Contraseña</a>
+          </p>
+          <input type="submit" class="btn" value="Ingresar" name="signIn">
+        </form>
+        <p class="or">----------o----------</p>
+        <div class="icons">
+          <i class="fab fa-google"></i>
+          <i class="fab fa-facebook"></i>
+        </div>
+        <div class="links">
+          <p>¿No tienes una cuenta todavía?</p>
+          <button id="signUpButton">Registrarse</button>
+        </div>
+      </div>
+  
+      <!-- Sign Up Form -->
+      <div class="login-container" id="signup" style="display:none;">
+        <h1 class="form-title">Registro</h1>
+        <form id="registerForm">
+          <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" name="fName" id="nombre" placeholder="First Name" required>
+            <label for="fName">Nombre</label>
+          </div>
+          <div class="input-group">
+            <i class="fas fa-phone"></i>
+            <input type="tel" name="phone" id="telefono" placeholder="Teléfono" required>
+            <label for="signUpPhone">Teléfono</label>
+          </div>
+          <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" name="email" id="email" placeholder="Email" required>
+            <label for="signUpEmail">Email</label>
+          </div>
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="password" id="contraseña" placeholder="Password" required>
+            <label for="signUpPassword">Contraseña</label>
+          </div>
+          <div class="input-group">
+            <i class="fa-solid fa-house"></i>
+            <input type="text" name="direccion" id="direccion" placeholder="Direccion" required>
+            <label for="signUpDireccion">Direccion</label>
+          </div>
+          <input type="submit" class="btn" value="Registrarse" name="signUp">
+        </form>
+        <p class="or">----------o----------</p>
+        <div class="icons">
+          <i class="fab fa-google"></i>
+          <i class="fab fa-facebook"></i>
+        </div>
+        <div class="links">
+          <p>¿Ya tienes una cuenta?</p>
+          <button id="signInButton">Acceder</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Carrito -->
+  <div id="cart-modal">
+    <button class="close-btn">×</button>
+    <h2>Tu Carrito</h2>
+    <div id="cart-items">
+      <!-- Aquí se inyectarán los productos del carrito -->
+    </div>
+    <div id="cart-total"></div>
+    <button id="clear-cart">Vaciar Carrito</button>
+  </div>
+  
+  <!-- Modal de Favoritos -->
+  <div id="favorites-modal">
+    <button class="close-btn">×</button>
+    <h2>Mis Favoritos</h2>
+    <div id="favorites-items">
+      <!-- Aquí se inyectarán los productos favoritos -->
+    </div>
+    <button id="clear-favorites">Vaciar Favoritos</button>
+  </div>
+  

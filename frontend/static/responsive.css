@@ -1,0 +1,114 @@
+/* Responsive */
+@media (max-width: 1024px) {
+    .container {
+        grid-template-columns: 200px 1fr;
+        grid-template-areas:
+            "sidebar-left main";
+        padding-top: 170px; /* Mantener el mismo padding-top */
+    }
+
+    .sidebar-right {
+        display: none;
+    }
+
+    .categories, .popular-products {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "main";
+    }
+
+    .sidebar-left {
+        display: none;
+    }
+
+    .categories, .popular-products {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .contact-info {
+        align-items: center;
+    }
+
+    .brands-carousel {
+        padding: 0 30px;
+    }
+
+    .nav-menu ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .main-banner {
+        height: 250px;
+    }
+
+     /* Ajustes del contenedor de producto */
+     .product-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    /* Ajustes de la sección de cantidad */
+    .quantity-section {
+        flex-wrap: wrap;
+    }
+    
+    .add-to-cart, .buy-now {
+        margin: 0.5rem 0;
+        width: 100%;
+    }
+    
+    .wishlist-btn {
+        margin: 0.5rem auto;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .categories, .popular-products {
+        grid-template-columns: 1fr;
+    }
+
+    .releases-carousel {
+        gap: 15px;
+    }
+
+    .release-card {
+        min-width: 200px;
+    }
+
+    .brand-item {
+        min-width: 120px;
+    }
+
+    .thumbnail-container {
+        justify-content: center;
+    }
+    
+    .size-options, .color-options {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .product-title {
+        font-size: 1.5rem;
+    }
+    
+    .quantity-section {
+        justify-content: center;
+    }
+}

@@ -1,0 +1,424 @@
+/* Definición de variables CSS para colores */
+:root {
+    --primary-purple: #6d438f;
+    --light-purple: #9932d4;
+    --dark-purple: #4a235a;
+    --light-orange: #ff8800;
+    --dark-orange:   #f37712;
+    --light-green: #27ae60 ;
+    --dark-green:  #2ecc71; ; /* Verde más fuerte para notificaciones */
+    --light-gray: #f5f5f5;
+    --dark-gray: #333;
+    --white: #fff;
+}
+
+/* Estilos básicos y reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+
+/* Estilos para el contenedor principal */
+.container {
+    padding-top: 180px;
+    /* 120px del header + 50px del nav (aprox) */
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  
+  /* Aseguramos que otras secciones no sean tapadas */
+  .new-releases,
+  .our-brands {
+    margin-top: 30px;
+  }
+
+/* Estilos para breadcrumb (ruta de navegación) */
+.breadcrumb {
+    display: flex;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.breadcrumb a {
+    color: var(--primary-purple);
+    text-decoration: none;
+    margin-right: 0.5rem;
+}
+
+.breadcrumb span {
+    margin: 0 0.5rem;
+}
+
+/* Estilos para el contenedor del producto */
+.product-container {
+    display: grid;
+    grid-template-columns: 55% 40%;
+    gap: 5%;
+}
+
+/* Estilos para las imágenes del producto */
+.product-images {
+    position: relative;
+}
+
+.main-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.thumbnail-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.thumbnail:hover, .thumbnail.active {
+    border-color: var(--primary-purple);
+}
+
+/* Estilos para la información del producto */
+.product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.product-title {
+    font-size: 2rem;
+    color: var(--dark-gray);
+    margin-bottom: 0.5rem;
+}
+
+.product-brand {
+    color: var(--primary-purple);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.product-sku {
+    color: var(--dark-gray);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Estilos para el sistema de calificación */
+.rating {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.star {
+    color: var(--light-orange);
+    font-size: 1.2rem;
+    margin-right: 0.2rem;
+}
+
+.reviews-count {
+    color: #666;
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Estilos para el precio */
+.product-price {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--dark-purple);
+    margin-bottom: 0.5rem;
+}
+
+.product-sale {
+    font-size: 0.9rem;
+    color: var(--dark-gray);
+    margin-bottom: 1rem;
+}
+
+.product-sale span {
+    color: var(--light-orange);
+    font-weight: bold;
+}
+
+/* Estilos para las opciones de color */
+.product-colors {
+    margin-bottom: 1.5rem;
+}
+
+.color-title {
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+    display: block;
+}
+
+.color-options {
+    display: flex;
+    gap: 1rem;
+}
+
+.color-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #e0e0e0;
+    transition: border-color 0.3s;
+}
+
+.color-option.active {
+    border-color: var(--primary-purple);
+}
+
+.color-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+/* Estilos para las opciones de talla */
+.product-sizes {
+    margin-bottom: 1.5rem;
+}
+
+.size-title {
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+    display: block;
+}
+
+.size-options {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.size-option {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.size-option:hover {
+    background-color: var(--light-purple);
+    color: var(--white);
+}
+
+.size-option.active {
+    background-color: var(--primary-purple);
+    color: var(--white);
+    border-color: var(--primary-purple);
+}
+
+/* Estilos para la sección de cantidad */
+.quantity-section {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Control de cantidad */
+.quantity-control {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.quantity-btn {
+    width: 40px;
+    height: 40px;
+    background-color: var(--light-gray);
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.quantity-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.quantity-display {
+    width: 50px;
+    height: 40px;
+    border: none;
+    text-align: center;
+    font-size: 1rem;
+}
+
+/* Estilos para los botones de acción */
+.add-to-cart,
+.buy-now {
+    background-color: var(--primary-purple);
+    color: var(--white);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.add-to-cart:hover,
+.buy-now:hover {
+    background-color: var(--dark-purple);
+}
+
+/* Estilos específicos para el botón "Comprar ahora" */
+.buy-now {
+    background-color: var(--light-orange);
+}
+
+.buy-now:hover {
+    background-color: var(--dark-orange);
+}
+
+/* Botón de lista de deseos */
+.wishlist-btn {
+    width: 40px;
+    height: 65px;
+    border: 1px solid #e0e0e0;
+    background-color: var(--white);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wishlist-btn:hover {
+    background-color: #f8f8f8;
+}
+
+/* Estilos para promociones y descripción */
+.product-promotions {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.product-promotions h3 {
+    margin-bottom: 1rem;
+    color: var(--dark-purple);
+}
+
+.product-description {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.product-specs {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Estilos para la tabla de especificaciones */
+.product-specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.product-specs-table th, 
+.product-specs-table td {
+    border: 1px solid #ddd;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.product-specs-table th {
+    background-color: var(--dark-purple);
+    color: white;
+    font-weight: bold;
+}
+
+.product-specs-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.product-specs-list {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.product-specs-list li {
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+
+/* Estilos para información de contacto */
+.contact-info {
+    margin-top: 1.5rem;
+}
+
+.whatsapp-contact, .guarantee-info {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+    color: var(--primary-purple);
+    font-size: 0.9rem;
+}
+
+.whatsapp-contact i, .guarantee-info i {
+    margin-right: 0.5rem;
+}
+
+/* Estilos para la notificación */
+.notification {
+    position: fixed;
+    bottom: 20px; /* Cambiado a bottom para que aparezca en la parte inferior */
+    left: 50%; /* Centrado horizontalmente */
+    transform: translateX(-50%); /* Ajuste para centrado preciso */
+    background-color: var(--dark-green); /* Verde más fuerte */
+    color: var(--white);
+    padding: 1rem 2rem; /* Padding horizontal aumentado */
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0; /* Inicialmente invisible */
+    transition: opacity 0.3s ease-in-out;
+    z-index: 1000;
+    text-align: center;
+    font-weight: 500;
+    display: none;
+}
+
+.notification.active {
+    opacity: 1;
+    display: block;
+}
