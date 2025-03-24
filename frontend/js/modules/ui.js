@@ -38,7 +38,7 @@ export function loadHeaderFooter() {
   console.log("Cargando header y footer...");
   
   // Carga del header
-  const headerPromise = fetch('./header.html')
+  const headerPromise = fetch('./templates/header.html')
     .then(response => {
       if (!response.ok) {
         throw new Error(`Error al cargar header: ${response.status}`);
@@ -60,7 +60,7 @@ export function loadHeaderFooter() {
     });
   
   // Carga del footer
-  const footerPromise = fetch('./footer.html')
+  const footerPromise = fetch('./templates/footer.html')
     .then(response => {
       if (!response.ok) {
         throw new Error(`Error al cargar footer: ${response.status}`);

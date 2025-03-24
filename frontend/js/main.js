@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return Promise.reject("Falta el contenedor de modales");
       }
       
-      return fetch('./modals.html')
+      return fetch('./templates/modals.html')
         .then(response => {
           if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
           return response.text();
