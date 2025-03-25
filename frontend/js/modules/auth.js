@@ -1,4 +1,7 @@
 import { mostrarMensaje } from './ui.js';
+import { updateUIBasedOnAuth } from './ui.js';
+
+console.log("Iniciando login...")
 
 export function attachLoginListener() {
   const loginIcon = document.getElementById("loginIcon");
@@ -106,6 +109,35 @@ export function attachRegistroListener() {
 
 
 // auth.js
+
+function parseJwt(token) {
+  try {
+    console.log("Token completo:", token);
+    
+    // Dividir el token en sus partes
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      console.error('Token inválido');
+      return {};
+    }
+
+    // Decodificar la parte del payload (segunda parte)
+    const base64Url = parts[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    const payload = JSON.parse(jsonPayload);
+    console.log("Payload decodificado detallado:", payload);
+
+    return payload;
+  } catch (e) {
+    console.error('Error decodificando JWT', e);
+    return {};
+  }
+}
+
 export async function login(email, password) {
   try {
     const response = await fetch('http://localhost:3000/auth/login', {
@@ -118,37 +150,25 @@ export async function login(email, password) {
     if (response.ok) {
       // Guarda el token en localStorage
       localStorage.setItem('token', data.token);
-      
-      // Opcional: decodifica el token para obtener el rol y otros datos
+
+      // Decodifica el token para extraer el role
       const payload = parseJwt(data.token);
-      localStorage.setItem('userRole', payload.role);
       
-      alert('Inicio de sesión exitoso');
+      // Extrae el rol, con valor por defecto 'cliente'
+      const role = payload.role || 'cliente';
       
-      // Llama a la función para actualizar la UI según el estado de autenticación
-      updateUIBasedOnAuth();
+      console.log("Rol extraído:", role);
+
+      // Guarda el rol en localStorage
+      localStorage.setItem('userRole', role);
+
+      mostrarMensaje('Inicio de sesión exitoso');
+      updateUIBasedOnAuth(); // Actualiza la interfaz
     } else {
-      alert('Error: ' + data.error);
+      mostrarMensaje('Error: ' + data.error);
     }
   } catch (error) {
     console.error(error);
-    alert('Error de conexión');
-  }
-}
-
-// Función simple para decodificar el payload del JWT (sin validación)
-function parseJwt(token) {
-  try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
-    );
-    return JSON.parse(jsonPayload);
-  } catch (e) {
-    return null;
+    mostrarMensaje('Error de conexión');
   }
 }

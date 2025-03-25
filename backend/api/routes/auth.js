@@ -43,35 +43,47 @@ router.post('/register', async (req, res) => {
 });
 
 // Ruta de login
+// auth.js
 router.post('/login', (req, res) => {
   const { email, contraseña } = req.body;
   const query = 'SELECT * FROM clientes WHERE email = ?';
-
+  
   conexion.query(query, [email], async (err, results) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Error en el servidor' });
-    }
-    if (results.length === 0) {
-      return res.status(401).json({ error: 'Usuario no encontrado' });
-    }
+    if (err) return res.status(500).json({ error: 'Error en el servidor' });
+    if (results.length === 0) return res.status(401).json({ error: 'Usuario no encontrado' });
+    
     const user = results[0];
+    console.log("Usuario desde la base de datos:", user);
+    console.log("Role del usuario:", user.role); // Log específico del rol
 
-    // Verificar la contraseña encriptada
     const validPassword = await bcrypt.compare(contraseña, user.contraseña);
-    if (!validPassword) {
-      return res.status(401).json({ error: 'Contraseña incorrecta' });
-    }
+    if (!validPassword) return res.status(401).json({ error: 'Contraseña incorrecta' });
 
-    // Generar el token JWT, incluyendo información útil (id, email, role)
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      { 
+        id: user.id, 
+        email: user.email, 
+        role: user.role,  // Esto es clave
+        sub: user.email   
+      },
       SECRET_KEY,
-      { expiresIn: '2h' } // El token expirará en 2 horas
+      { expiresIn: '2h' }
     );
 
-    res.json({ message: 'Inicio de sesión exitoso', token });
+    console.log("Token generado:", token);
+
+    res.json({ 
+      message: 'Inicio de sesión exitoso', 
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role
+      }
+    });
   });
 });
+
+
 
 module.exports = router;

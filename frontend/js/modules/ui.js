@@ -367,7 +367,6 @@ export function initSlider() {
     }
 
     currentIndex = index;
-    console.log("Mostrando slide:", index);
 
     startSliderInterval();
   }
@@ -448,4 +447,43 @@ export function initBrandsCarousel() {
   }
   
   console.log("Carrusel de marcas inicializado correctamente");
+}
+
+
+
+export function updateUIBasedOnAuth() {
+  // Recupera el token y el rol del usuario desde localStorage
+  const token = localStorage.getItem('token');
+  const userRole = localStorage.getItem('userRole');
+
+  // Muestra los valores recuperados para depuración
+  console.log("updateUIBasedOnAuth() - Token:", token);
+  console.log("updateUIBasedOnAuth() - User Role:", userRole);
+
+  // Elementos de la UI
+  const loginIcon = document.getElementById('loginIcon');
+  const logoutIcon = document.getElementById('logoutIcon');
+  const adminPanel = document.getElementById('adminPanel');
+
+  if (token) {
+    console.log("Usuario autenticado");
+    if (loginIcon) loginIcon.style.display = 'none';
+    if (logoutIcon) logoutIcon.style.display = 'block';
+    
+    if (adminPanel) {
+      // Compara el rol de manera estricta
+      if (userRole === 'admin') {
+        adminPanel.style.display = 'block';
+        console.log("Mostrando panel de administración (usuario admin)");
+      } else {
+        adminPanel.style.display = 'none';
+        console.log("Ocultando panel de administración (usuario no admin)");
+      }
+    }
+  } else {
+    console.log("Usuario no autenticado");
+    if (loginIcon) loginIcon.style.display = 'block';
+    if (logoutIcon) logoutIcon.style.display = 'none';
+    if (adminPanel) adminPanel.style.display = 'none';
+  }
 }

@@ -3,9 +3,11 @@ import { initCarrito, actualizarContadorCarrito } from './modules/cart.js';
 import { activarBotonesFavoritos } from './modules/favorites.js';
 import { loadHeaderFooter, initSlider, initBrandsCarousel, setupModals, mostrarMensaje } from './modules/ui.js';
 import { filtrarProductos } from './modules/filters.js';
+import { updateUIBasedOnAuth } from './modules/ui.js';
 
 document.addEventListener("DOMContentLoaded", function() {
   // Cargar header y footer primero
+  updateUIBasedOnAuth();
   loadHeaderFooter()
     .then(() => {
       console.log("Header y footer cargados");
