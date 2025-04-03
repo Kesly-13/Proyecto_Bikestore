@@ -9,7 +9,7 @@
 
 
 /* Estilos generales */
- * {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -67,7 +67,7 @@ body {
 .popular-products,
 .new-releases {
     margin-top: 10px; /* Agrega margen adicional si se necesita */
-/* } */ 
+/* } */
 
 
 /* Estilo general para los iconos */
@@ -81,41 +81,41 @@ body {
 
 /* .icon i {
   font-size: 28px; Iconos más grandes */
-  /* color: white; Color base para que contraste con el fondo morado */
-  /* transition: color 0.3s ease;
+/* color: white; Color base para que contraste con el fondo morado */
+/* transition: color 0.3s ease;
 } */
 
 /* Efecto hover */
 /* .icon:hover { */
-  /* background: rgba(255, 255, 255, 0.062); Un ligero fondo blanco con transparencia */
-  /* transform: scale(1.1); Un pequeño zoom al pasar el mouse */
+/* background: rgba(255, 255, 255, 0.062); Un ligero fondo blanco con transparencia */
+/* transform: scale(1.1); Un pequeño zoom al pasar el mouse */
 /* } */
 
 /* Estilo específico para el carrito */
 /* .cart-icon i { */
-  /* color: #ffffff; Dorado para resaltar */
+/* color: #ffffff; Dorado para resaltar */
 /* } */
 
 /* .cart-icon:hover i { */
-  /* color: rgb(222, 90, 255); Naranja dorado */
+/* color: rgb(222, 90, 255); Naranja dorado */
 /* } */
 
 /* Estilo específico para el login */
 /* #loginIcon i { */
-  /* color: #ffffff; Celeste */
+/* color: #ffffff; Celeste */
 /* } */
 
 /* #loginIcon:hover i { */
-  /* color: rgb(222, 90, 255); Azul más vibrante */
+/* color: rgb(222, 90, 255); Azul más vibrante */
 /* } */
 
 /* Estilo específico para favoritos */
 /* #favoritesIcon i { */
-  /* color: #ffffff; Rosa */
+/* color: #ffffff; Rosa */
 /* } */
 
 /* #favoritesIcon:hover i { */
-  /* color: #ff8800; Fucsia oscuro */
+/* color: #ff8800; Fucsia oscuro */
 /* } */
 
 /* Estilo para la burbuja de notificación */
@@ -201,13 +201,13 @@ body {
 /* .nav-menu {
     position: fixed;
     top: 130px; Comienza justo debajo del header */
-    /* left: 0;
+/* left: 0;
     width: 100%;
     background-color: #f8f8f8;
     padding: 10px 0;
     border-bottom: 1px solid #eee;
     z-index: 1000; */
-     /* Menor que el header pero aún alto */
+/* Menor que el header pero aún alto */
 /* } */
 
 /* .nav-menu ul {
@@ -237,7 +237,8 @@ body {
 
 /* Estructura principal de la página */
 .container {
-    padding-top: 170px; /* 120px del header + 50px del nav (aprox) */
+    padding-top: 170px;
+    /* 120px del header + 50px del nav (aprox) */
     display: grid;
     grid-template-columns: 250px 1fr 250px;
     grid-template-areas:
@@ -250,7 +251,8 @@ body {
 
 
 /* Aseguramos que otras secciones no sean tapadas */
-.new-releases, .our-brands {
+.new-releases,
+.our-brands {
     margin-top: 20px;
 }
 
@@ -263,14 +265,16 @@ body {
 .motivation-section,
 .promotion-section {
     position: relative;
-    overflow: hidden; /* Para recortar cualquier contenido extra */
+    overflow: hidden;
+    /* Para recortar cualquier contenido extra */
 }
 
 /* Estilo de la imagen para un efecto hover */
 .motivation-section img,
 .promotion-section img {
     width: 100%;
-    height: 500px; /* Ajusta la altura según necesites */
+    height: 500px;
+    /* Ajusta la altura según necesites */
     object-fit: cover;
     transition: transform 0.3s ease;
 }
@@ -287,7 +291,8 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* Overlay semitransparente */
+    background: rgba(0, 0, 0, 0.4);
+    /* Overlay semitransparente */
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -349,13 +354,16 @@ main {
 .main-banner {
     position: relative;
     background-color: #eee;
-    height: 400px; /* Cambia la altura según lo necesites */
-    width: 100%; /* Ajusta el ancho si es necesario */
+    height: 400px;
+    /* Cambia la altura según lo necesites */
+    width: 100%;
+    /* Ajusta el ancho si es necesario */
     margin-bottom: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden; /* Oculta las otras diapositivas */
+    overflow: hidden;
+    /* Oculta las otras diapositivas */
 }
 
 /* Contenedor del carrusel: asegúrate de que sea relativo para posicionar las diapositivas */
@@ -389,14 +397,14 @@ main {
 }
 
 .banner-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .banner-slide video {
     width: 100%;
-    height: 100%; 
+    height: 100%;
     object-fit: cover;
 }
 
@@ -580,7 +588,8 @@ main {
     margin-bottom: 40px;
     padding: 10px 0;
     gap: 20px;
-    justify-content: space-between; /* Distribuye el espacio uniformemente */
+    justify-content: space-between;
+    /* Distribuye el espacio uniformemente */
 }
 
 .releases-carousel::-webkit-scrollbar {
@@ -599,7 +608,8 @@ main {
 
 .release-card {
     min-width: 250px;
-    width: calc(25% - 20px); /* Ajusta para que cada tarjeta ocupe exactamente 1/4 del espacio con margen */
+    width: calc(25% - 20px);
+    /* Ajusta para que cada tarjeta ocupe exactamente 1/4 del espacio con margen */
     border: 1px solid #eee;
     background-color: white;
     padding-bottom: 15px;
@@ -607,7 +617,8 @@ main {
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
     flex-shrink: 0;
-    height: auto; /* Permite que la altura se ajuste al contenido */
+    height: auto;
+    /* Permite que la altura se ajuste al contenido */
     display: flex;
     flex-direction: column;
 }
@@ -619,14 +630,18 @@ main {
 
 .release-image {
     height: 200px;
-    width: 100%; /* Asegura que todas las imágenes tengan el mismo ancho relativo */
+    width: 100%;
+    /* Asegura que todas las imágenes tengan el mismo ancho relativo */
     background-color: #f9f9f9;
     display: flex;
-    align-items: center; /* Centra verticalmente */
-    justify-content: center; /* Centra horizontalmente */
+    align-items: center;
+    /* Centra verticalmente */
+    justify-content: center;
+    /* Centra horizontalmente */
     color: #aaa;
     margin-bottom: 10px;
-    text-align: center; /* Asegura que el texto esté centrado */
+    text-align: center;
+    /* Asegura que el texto esté centrado */
 }
 
 .release-info {
@@ -680,35 +695,44 @@ main {
 
 .brands-carousel {
     display: flex;
-    align-items: center; /* Alinea todos los elementos (incluidas las flechas) verticalmente */
+    align-items: center;
+    /* Alinea todos los elementos (incluidas las flechas) verticalmente */
     position: relative;
-    height: 100px; /* Altura fija para mantener consistencia */
+    height: 100px;
+    /* Altura fija para mantener consistencia */
 }
 
 .brands-container {
     display: flex;
     overflow-x: hidden;
     scroll-behavior: smooth;
-    gap: 20px; /* Espacio uniforme entre marcas */
+    gap: 20px;
+    /* Espacio uniforme entre marcas */
     padding: 10px 0;
     width: 100%;
-    justify-content: space-between; /* Distribuye el espacio uniformemente */
+    justify-content: space-between;
+    /* Distribuye el espacio uniformemente */
 }
 
 .brand-item {
     min-width: 150px;
-    width: 200px; /* Ancho fijo para todas las marcas */
+    width: 200px;
+    /* Ancho fijo para todas las marcas */
     height: 100px;
     background-color: #f9f9f9;
     display: flex;
-    align-items: center; /* Centra el texto verticalmente */
-    justify-content: center; /* Centra el texto horizontalmente */
+    align-items: center;
+    /* Centra el texto verticalmente */
+    justify-content: center;
+    /* Centra el texto horizontalmente */
     border: 1px solid #eee;
     border-radius: 4px;
     flex-shrink: 0;
     text-align: center;
-    margin: 0; /* Elimina cualquier margen que pueda causar desalineación */
-    font-size: 16px; /* Tamaño de fuente consistente */
+    margin: 0;
+    /* Elimina cualquier margen que pueda causar desalineación */
+    font-size: 16px;
+    /* Tamaño de fuente consistente */
 }
 
 
@@ -727,8 +751,10 @@ main {
     position: absolute;
     z-index: 10;
     transition: background-color 0.3s;
-    top: 50%; /* Posiciona a la mitad del contenedor padre */
-    transform: translateY(-50%); /* Ajusta para centrar verticalmente */
+    top: 50%;
+    /* Posiciona a la mitad del contenedor padre */
+    transform: translateY(-50%);
+    /* Ajusta para centrar verticalmente */
 }
 
 .nav-arrow:hover {

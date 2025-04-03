@@ -2,7 +2,7 @@ CREATE DATABASE bike_store;
 USE bike_store;
 
 -- Tabla de usuarios: registra la información de los clientes
-CREATE TABLE clientes (
+CREATE TABLE Usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,s

@@ -104,6 +104,7 @@ form {
     transform: translateY(-50%);
     cursor: text;
     transition: 0.3s ease all;
+    pointer-events: none;
 }
 
 .input-group input:focus ~ label,
@@ -815,3 +816,73 @@ form {
   background-color: #07001f;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+/* Asegurar que el fondo del modal ocupe toda la pantalla */
+/* En modals.css - Corregir posición del modal */
+#session-modal {
+  position: fixed;
+  top: 0;
+  right: -350px;
+  width: 350px;
+  height: 100vh;
+  background-color: #fff;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+  z-index: 3000; /* Valor mayor que todos los elementos */
+  transition: right 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 0;
+  padding: 20px;
+}
+
+
+#session-modal.active {
+  right: 0;
+  opacity: 1;
+}
+
+
+
+/* 
+#session-modal .modal-content {
+  position: relative;
+  height: 100%;
+  padding: 20px;
+} */
+
+
+
+#session-modal h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+#session-modal p {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+#session-modal button {
+  background-color: rgb(125, 125, 235);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#session-modal button:hover {
+  background-color: #07001f;
+}

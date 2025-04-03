@@ -42,27 +42,27 @@
           <div class="input-group">
             <i class="fas fa-user"></i>
             <input type="text" name="fName" id="nombre" placeholder="First Name" required>
-            <label for="fName">Nombre</label>
+            <label>Nombre</label>
           </div>
           <div class="input-group">
             <i class="fas fa-phone"></i>
             <input type="tel" name="phone" id="telefono" placeholder="Teléfono" required>
-            <label for="signUpPhone">Teléfono</label>
+            <label>Teléfono</label>
           </div>
           <div class="input-group">
             <i class="fas fa-envelope"></i>
             <input type="email" name="email" id="email" placeholder="Email" required>
-            <label for="signUpEmail">Email</label>
+            <label>Email</label>
           </div>
           <div class="input-group">
             <i class="fas fa-lock"></i>
             <input type="password" name="password" id="contraseña" placeholder="Password" required>
-            <label for="signUpPassword">Contraseña</label>
+            <label>Contraseña</label>
           </div>
           <div class="input-group">
             <i class="fa-solid fa-house"></i>
             <input type="text" name="direccion" id="direccion" placeholder="Direccion" required>
-            <label for="signUpDireccion">Direccion</label>
+            <label>Direccion</label>
           </div>
           <input type="submit" class="btn" value="Registrarse" name="signUp">
         </form>
@@ -100,3 +100,14 @@
     <button id="clear-favorites">Vaciar Favoritos</button>
   </div>
   
+
+
+
+  <div id="session-modal">
+    <div class="modal-content"> <!-- Capa adicional para detectar clics externos -->
+      <span class="close-button" id="closeSessionModal">&times;</span>
+      <h2>Sesión activa</h2>
+      <p>Bienvenido, usuario</p>
+      <button id="logoutButton">Cerrar sesión</button>
+    </div>
+  </div>

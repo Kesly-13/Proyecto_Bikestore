@@ -11,13 +11,13 @@ export function mostrarMensaje(texto, duracion = 2000) {
   if (mensajeExistente) {
     mensajeExistente.remove();
   }
-  
+
   // Crear nuevo mensaje
   const mensaje = document.createElement("div");
   mensaje.className = "mensaje-confirmacion";
   mensaje.textContent = texto;
   document.body.appendChild(mensaje);
-  
+
   // Mostrar con animación y luego ocultar
   setTimeout(() => {
     mensaje.classList.add("mostrar");
@@ -36,7 +36,7 @@ export function mostrarMensaje(texto, duracion = 2000) {
  */
 export function loadHeaderFooter() {
   console.log("Cargando header y footer...");
-  
+
   // Carga del header
   const headerPromise = fetch('./templates/header.html')
     .then(response => {
@@ -58,7 +58,7 @@ export function loadHeaderFooter() {
       console.error("Error al cargar el header:", err);
       mostrarMensaje("Error al cargar la página. Por favor, recarga.", 3000);
     });
-  
+
   // Carga del footer
   const footerPromise = fetch('./templates/footer.html')
     .then(response => {
@@ -79,7 +79,7 @@ export function loadHeaderFooter() {
     .catch(err => {
       console.error("Error al cargar el footer:", err);
     });
-  
+
   // Retornar una promesa que se resuelve cuando ambos se han cargado
   return Promise.all([headerPromise, footerPromise]).then(() => {
     console.log("Header y footer completamente cargados");
@@ -91,17 +91,17 @@ export function loadHeaderFooter() {
  */
 export function setupModals() {
   console.log("Configurando modales...");
-  
+
   // Agregar clase modal-sidebar a los modales de carrito y favoritos
   const cartModal = document.getElementById("cart-modal");
   const favoritesModal = document.getElementById("favorites-modal");
   const loginModal = document.getElementById("loginModal");
-  
+
   if (cartModal) {
     cartModal.classList.add("modal-sidebar");
     console.log("Clase modal-sidebar añadida al carrito");
   }
-  
+
   if (favoritesModal) {
     favoritesModal.classList.add("modal-sidebar");
     console.log("Clase modal-sidebar añadida a favoritos");
@@ -112,12 +112,12 @@ export function setupModals() {
     // No seguir si faltan elementos
     return;
   }
-  
+
   // Configurar cada modal
   setupLoginModal();
   setupCartModal();
   setupFavoritesModal();
-  
+
   console.log("Configuración de modales completada");
 }
 
@@ -127,19 +127,21 @@ export function setupModals() {
 function setupLoginModal() {
   const loginIcon = document.getElementById("loginIcon");
   const loginModal = document.getElementById("loginModal");
-  
+
   if (!loginIcon || !loginModal) {
     console.warn("No se encontró el ícono o modal de login");
     return;
   }
-  
-  // Manejador para abrir modal
+
+  // [Elimina o comenta el siguiente bloque para evitar duplicidad]
+  /*
   loginIcon.addEventListener("click", function() {
     console.log("Se hizo clic en loginIcon");
     loginModal.style.display = "flex";
     console.log("Login modal mostrado");
   });
-  
+  */
+
   // Manejador para cerrar modal con X
   const closeButton = loginModal.querySelector(".close-button");
   if (closeButton) {
@@ -150,7 +152,7 @@ function setupLoginModal() {
   } else {
     console.warn("No se encontró el botón de cierre para el modal de login");
   }
-  
+
   // Cerrar al hacer clic fuera del modal
   loginModal.addEventListener("click", (event) => {
     if (event.target === loginModal) {
@@ -158,24 +160,24 @@ function setupLoginModal() {
       console.log("Login modal cerrado al hacer clic fuera");
     }
   });
-  
-  // Configurar cambio entre formularios
+
+  // Configurar cambio entre formularios (login y registro)
   const signUpButton = document.getElementById("signUpButton");
   const signInButton = document.getElementById("signInButton");
   const signInContainer = document.getElementById("signIn");
   const signUpContainer = document.getElementById("signup");
-  
+
   if (signUpButton && signInContainer && signUpContainer) {
-    signUpButton.addEventListener("click", function(e) {
+    signUpButton.addEventListener("click", function (e) {
       e.preventDefault();
       signInContainer.style.display = "none";
       signUpContainer.style.display = "block";
       console.log("Cambiando a formulario de registro");
     });
   }
-  
+
   if (signInButton && signInContainer && signUpContainer) {
-    signInButton.addEventListener("click", function(e) {
+    signInButton.addEventListener("click", function (e) {
       e.preventDefault();
       signUpContainer.style.display = "none";
       signInContainer.style.display = "block";
@@ -184,25 +186,26 @@ function setupLoginModal() {
   }
 }
 
+
 /**
  * Configura el modal del carrito
  */
 function setupCartModal() {
   const cartIcon = document.querySelector(".cart-icon");
   const cartModal = document.getElementById("cart-modal");
-  
+
   if (!cartIcon || !cartModal) {
     console.warn("No se encontró el ícono o modal del carrito");
     return;
   }
-  
+
   // Asignar manejador de eventos para abrir el modal
-  cartIcon.addEventListener("click", function(e) {
+  cartIcon.addEventListener("click", function (e) {
     e.preventDefault();
     e.stopPropagation();
     console.log("Se hizo clic en el ícono del carrito");
     cartModal.classList.add("active");
-    
+
     // Cargar dinámicamente el módulo del carrito
     import('./cart.js').then(module => {
       module.actualizarCarritoModal();
@@ -211,7 +214,7 @@ function setupCartModal() {
       console.error("Error al cargar el módulo del carrito:", err);
     });
   });
-  
+
   // Configurar botón de cierre
   const closeCartBtn = cartModal.querySelector(".close-btn");
   if (closeCartBtn) {
@@ -222,7 +225,7 @@ function setupCartModal() {
   } else {
     console.warn("No se encontró el botón de cierre para el modal del carrito");
   }
-  
+
   // Configurar botón para vaciar carrito
   const clearCartBtn = document.getElementById("clear-cart");
   if (clearCartBtn) {
@@ -238,12 +241,12 @@ function setupCartModal() {
       });
     });
   }
-  
+
   // Cerrar al hacer clic fuera del modal
-  document.addEventListener("click", function(event) {
-    if (cartModal.classList.contains("active") && 
-        !cartModal.contains(event.target) && 
-        !cartIcon.contains(event.target)) {
+  document.addEventListener("click", function (event) {
+    if (cartModal.classList.contains("active") &&
+      !cartModal.contains(event.target) &&
+      !cartIcon.contains(event.target)) {
       cartModal.classList.remove("active");
       console.log("Modal del carrito cerrado al hacer clic fuera");
     }
@@ -256,19 +259,19 @@ function setupCartModal() {
 function setupFavoritesModal() {
   const favIcon = document.getElementById("favoritesIcon");
   const favModal = document.getElementById("favorites-modal");
-  
+
   if (!favIcon || !favModal) {
     console.warn("No se encontró el ícono o modal de favoritos");
     return;
   }
-  
+
   // Asignar manejador de eventos para abrir el modal
-  favIcon.addEventListener("click", function(e) {
+  favIcon.addEventListener("click", function (e) {
     e.preventDefault();
     e.stopPropagation();
     console.log("Se hizo clic en el ícono de favoritos");
     favModal.classList.add("active");
-    
+
     // Cargar dinámicamente el módulo de favoritos
     import('./favorites.js').then(module => {
       module.cargarFavoritosEnModal();
@@ -277,7 +280,7 @@ function setupFavoritesModal() {
       console.error("Error al cargar el módulo de favoritos:", err);
     });
   });
-  
+
   // Configurar botón de cierre
   const closeFavBtn = favModal.querySelector(".close-btn");
   if (closeFavBtn) {
@@ -288,7 +291,7 @@ function setupFavoritesModal() {
   } else {
     console.warn("No se encontró el botón de cierre para el modal de favoritos");
   }
-  
+
   // Configurar botón para vaciar favoritos
   const clearFavBtn = document.getElementById("clear-favorites");
   if (clearFavBtn) {
@@ -306,17 +309,17 @@ function setupFavoritesModal() {
       });
     });
   }
-  
+
   // Prevenir cierre al hacer clic dentro del modal
-  favModal.addEventListener("click", function(event) {
+  favModal.addEventListener("click", function (event) {
     event.stopPropagation();
   });
-  
+
   // Cerrar solo al hacer clic fuera del modal
-  document.addEventListener("click", function(event) {
-    if (favModal.classList.contains("active") && 
-        !favModal.contains(event.target) && 
-        !favIcon.contains(event.target)) {
+  document.addEventListener("click", function (event) {
+    if (favModal.classList.contains("active") &&
+      !favModal.contains(event.target) &&
+      !favIcon.contains(event.target)) {
       favModal.classList.remove("active");
       console.log("Modal de favoritos cerrado al hacer clic fuera");
     }
@@ -418,14 +421,14 @@ export function initBrandsCarousel() {
   const brandsContainer = document.querySelector('.brands-container');
   const prevBrandButton = document.querySelector('.prev-brand');
   const nextBrandButton = document.querySelector('.next-brand');
-  
+
   if (!brandsContainer) {
     console.warn("No se encontró el contenedor de marcas");
     return;
   }
-  
+
   const brandWidth = 170; // Ancho de cada elemento marca en píxeles
-  
+
   // Configurar navegación anterior
   if (prevBrandButton) {
     prevBrandButton.addEventListener("click", () => {
@@ -435,7 +438,7 @@ export function initBrandsCarousel() {
       });
     });
   }
-  
+
   // Configurar navegación siguiente
   if (nextBrandButton) {
     nextBrandButton.addEventListener("click", () => {
@@ -445,9 +448,70 @@ export function initBrandsCarousel() {
       });
     });
   }
-  
+
   console.log("Carrusel de marcas inicializado correctamente");
 }
+
+
+
+
+
+
+export function setupSessionModal() {
+  const sessionModal = document.getElementById('session-modal');
+  const closeSessionModal = document.getElementById('closeSessionModal');
+  const logoutButton = document.getElementById('logoutButton');
+
+  if (!sessionModal) console.warn("No se encontró el modal de sesión");
+  if (!closeSessionModal) console.warn("No se encontró el botón de cerrar modal");
+  if (!logoutButton) console.warn("No se encontró el botón de logout");
+
+  if (!sessionModal || !closeSessionModal || !logoutButton) return;
+
+  // Configurar apertura del modal
+  const loginIcon = document.getElementById('loginIcon');
+  if (loginIcon) {
+    loginIcon.addEventListener('click', () => {
+      if (localStorage.getItem('token')) {
+        sessionModal.classList.add('active');
+      }
+    });
+  }
+
+  // Cerrar con la X
+  if (closeSessionModal) {
+    closeSessionModal.addEventListener('click', () => {
+      sessionModal.classList.remove('active');
+    });
+  }
+
+  // Cerrar haciendo clic fuera
+  document.addEventListener('click', (event) => {
+    if (sessionModal.classList.contains('active') &&
+      !sessionModal.contains(event.target) &&
+      !loginIcon.contains(event.target)) {
+      sessionModal.classList.remove('active');
+    }
+  });
+
+  // Cerrar con ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sessionModal.classList.contains('active')) {
+      sessionModal.classList.remove('active');
+    }
+  });
+
+  // Logout
+  if (logoutButton) {
+    logoutButton.addEventListener('click', () => {
+      logout();
+      sessionModal.classList.remove('active');
+    });
+  }
+}
+
+
+
 
 
 
@@ -456,34 +520,38 @@ export function updateUIBasedOnAuth() {
   const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('userRole');
 
-  // Muestra los valores recuperados para depuración
   console.log("updateUIBasedOnAuth() - Token:", token);
   console.log("updateUIBasedOnAuth() - User Role:", userRole);
 
   // Elementos de la UI
   const loginIcon = document.getElementById('loginIcon');
-  const logoutIcon = document.getElementById('logoutIcon');
+  if (loginIcon) {
+    if (token) {
+      // Usuario logueado
+      loginIcon.innerHTML = '<i class="fas fa-user-circle"></i>'; // Icono de usuario lleno
+      loginIcon.style.color = '#4CAF50'; // Verde para indicar sesión activa
+    } else {
+      // Usuario no logueado
+      loginIcon.innerHTML = '<i class="fas fa-user"></i>'; // Icono de usuario vacío
+      loginIcon.style.color = ''; // Quitar color especial
+    }
+  }
+
+  const sessionPanel = document.getElementById('sessionPanel');
   const adminPanel = document.getElementById('adminPanel');
 
   if (token) {
     console.log("Usuario autenticado");
-    if (loginIcon) loginIcon.style.display = 'none';
-    if (logoutIcon) logoutIcon.style.display = 'block';
-    
+    if (sessionPanel) sessionPanel.style.display = 'none';
     if (adminPanel) {
-      // Compara el rol de manera estricta
-      if (userRole === 'admin') {
-        adminPanel.style.display = 'block';
-        console.log("Mostrando panel de administración (usuario admin)");
-      } else {
-        adminPanel.style.display = 'none';
-        console.log("Ocultando panel de administración (usuario no admin)");
-      }
+      adminPanel.style.display = userRole === 'admin' ? 'block' : 'none';
     }
   } else {
     console.log("Usuario no autenticado");
-    if (loginIcon) loginIcon.style.display = 'block';
-    if (logoutIcon) logoutIcon.style.display = 'none';
+    if (sessionPanel) sessionPanel.style.display = 'none';
     if (adminPanel) adminPanel.style.display = 'none';
   }
 }
+
+
+

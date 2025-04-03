@@ -10,9 +10,9 @@ const conexion = mysql.createConnection({
 });
 
 // Función para la conexión y la reconexión
-function conectarBD(){
-    conexion.connect((error)=> {
-        if(error){
+function conectarBD() {
+    conexion.connect((error) => {
+        if (error) {
             console.log('[db error]', error);
             setTimeout(conectarBD, 200);
         } else {
@@ -20,7 +20,7 @@ function conectarBD(){
         }
     });
 
-    conexion.on('error', error =>{
+    conexion.on('error', error => {
         if (error.code === 'PROTOCOL_CONNECTION_LOST') {
             conectarBD();
         } else {

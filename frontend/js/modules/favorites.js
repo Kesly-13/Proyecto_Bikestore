@@ -3,6 +3,9 @@
 // Importamos funciones de otros módulos
 import { mostrarMensaje } from './ui.js';
 import { actualizarContadorCarrito } from './cart.js'; // Para usarla en agregarFavoritoAlCarrito()
+import { actualizarFavoritoEnBD } from './syncManager.js';
+
+
 
 /**
  * Activa los íconos de favoritos en las tarjetas y sincroniza el ícono
@@ -11,16 +14,16 @@ import { actualizarContadorCarrito } from './cart.js'; // Para usarla en agregar
 export function activarBotonesFavoritos() {
   // Selecciona todos los íconos de favoritos en las tarjetas
   const favIcons = document.querySelectorAll(".favorite-icon");
-  
+
   favIcons.forEach(icon => {
     // Obtener la tarjeta padre (release o product)
     const card = icon.closest(".release-card, .product-card");
     if (!card) return;
-    
+
     const productTitle = card.querySelector(".release-title, .product-title").textContent;
     const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
     const esFavorito = favoritos.some(item => item.nombre === productTitle);
-    
+
     // Actualiza el ícono según el estado
     if (esFavorito) {
       icon.classList.remove("far");
@@ -29,9 +32,9 @@ export function activarBotonesFavoritos() {
       icon.classList.remove("fas");
       icon.classList.add("far");
     }
-    
+
     // Agregar evento para marcar/desmarcar favorito
-    icon.addEventListener("click", function(e) {
+    icon.addEventListener("click", function (e) {
       e.stopPropagation();
       toggleFavorito(card);
     });
@@ -47,22 +50,31 @@ export function toggleFavorito(productoCard) {
   const precio = productoCard.querySelector(".release-price, .product-price").textContent;
   const imagen = productoCard.querySelector(".release-image img, .product-image img")?.src || "";
   const favIcon = productoCard.querySelector(".favorite-icon");
-  
+
   const index = favoritos.findIndex(item => item.nombre === titulo);
-  
+
   if (index === -1) {
     // Agregar a favoritos
-    favoritos.push({
+    const nuevoFavorito = {
       nombre: titulo,
       precio: precio,
       imagen: imagen
-    });
+    };
+
+    favoritos.push(nuevoFavorito);
+
     if (favIcon) {
       favIcon.classList.remove("far");
       favIcon.classList.add("fas");
     }
     mostrarMensaje("¡Producto agregado a favoritos!");
+
+    // Intentar actualizar en base de datos
+    actualizarFavoritoEnBD(nuevoFavorito, 'agregar');
   } else {
+    // Guardar referencia al favorito que vamos a eliminar
+    const favoritoEliminado = favoritos[index];
+
     // Quitar de favoritos
     favoritos.splice(index, 1);
     if (favIcon) {
@@ -70,8 +82,11 @@ export function toggleFavorito(productoCard) {
       favIcon.classList.add("far");
     }
     mostrarMensaje("Producto eliminado de favoritos");
+
+    // Intentar actualizar en base de datos
+    actualizarFavoritoEnBD(favoritoEliminado, 'eliminar');
   }
-  
+
   localStorage.setItem("favoritos", JSON.stringify(favoritos));
   actualizarContadorFavoritos();
   cargarFavoritosEnModal();
@@ -84,7 +99,7 @@ export function actualizarContadorFavoritos() {
   const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
   const totalFavoritos = favoritos.length;
   const badge = document.querySelector("#favoritesIcon .badge");
-  
+
   if (badge) {
     badge.textContent = totalFavoritos;
   }
@@ -96,15 +111,15 @@ export function actualizarContadorFavoritos() {
 export function cargarFavoritosEnModal() {
   const favoritosContainer = document.getElementById("favorites-items");
   if (!favoritosContainer) return;
-  
+
   const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
   favoritosContainer.innerHTML = "";
-  
+
   if (favoritos.length === 0) {
     favoritosContainer.innerHTML = "<p>No tienes productos favoritos.</p>";
     return;
   }
-  
+
   favoritos.forEach((producto, index) => {
     const itemDiv = document.createElement("div");
     itemDiv.className = "cart-item";
@@ -120,18 +135,18 @@ export function cargarFavoritosEnModal() {
     `;
     favoritosContainer.appendChild(itemDiv);
   });
-  
+
   // Asignar eventos a los botones para eliminar favoritos
   document.querySelectorAll("#favorites-items .remove-item").forEach(button => {
-    button.addEventListener("click", function(e) {
+    button.addEventListener("click", function (e) {
       e.stopPropagation(); // Evitar propagación para que no se cierre el modal
       eliminarFavorito(parseInt(this.dataset.index));
     });
   });
-  
+
   // Asignar eventos a los botones para añadir al carrito
   document.querySelectorAll("#favorites-items .add-to-cart-btn").forEach(button => {
-    button.addEventListener("click", function(e) {
+    button.addEventListener("click", function (e) {
       e.stopPropagation(); // Evitar propagación para que no se cierre el modal
       agregarFavoritoAlCarrito(parseInt(this.dataset.index));
     });
@@ -146,26 +161,29 @@ export function eliminarFavorito(index) {
   const productoEliminado = favoritos[index];
   favoritos.splice(index, 1);
   localStorage.setItem("favoritos", JSON.stringify(favoritos));
-  
+
   mostrarMensaje(`${productoEliminado.nombre} eliminado de favoritos`);
   actualizarContadorFavoritos();
   cargarFavoritosEnModal();
-  
-  // Nuevo: Actualizar el estado del corazón en todas las tarjetas
+
+  // Actualizar el estado del corazón en todas las tarjetas
   actualizarEstadoCorazones();
+
+  // Intentar actualizar en base de datos
+  actualizarFavoritoEnBD(productoEliminado, 'eliminar');
 }
 
 export function actualizarEstadoCorazones() {
   const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
   const favIcons = document.querySelectorAll(".favorite-icon");
-  
+
   favIcons.forEach(icon => {
     const card = icon.closest(".release-card, .product-card");
     if (!card) return;
-    
+
     const productTitle = card.querySelector(".release-title, .product-title").textContent;
     const esFavorito = favoritos.some(item => item.nombre === productTitle);
-    
+
     if (esFavorito) {
       icon.classList.remove("far");
       icon.classList.add("fas");

@@ -114,4 +114,149 @@ router.delete('/:tabla/:id', verifyToken, isAdmin, async (req, res) => {
   }
 });
 
+
+
+
+
+
+
+// crud.js (modificar/agregar estas rutas)
+
+// Rutas para el carrito
+// Obtener carrito de un usuario
+router.get('/cart/:userId', verifyToken, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const query = 'SELECT * FROM Carrito WHERE usuario_id = ?';
+
+    conexion.query(query, [userId], (error, resultados) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).send(error);
+      }
+      res.json(resultados);
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Añadir producto al carrito
+router.post('/cart/:userId', verifyToken, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { producto_nombre, precio, imagen, cantidad } = req.body;
+
+    const query = `
+      INSERT INTO Carrito (usuario_id, producto_nombre, producto_precio, producto_imagen, cantidad)
+      VALUES (?, ?, ?, ?, ?)
+      ON DUPLICATE KEY UPDATE cantidad = ?
+    `;
+
+    conexion.query(
+      query,
+      [userId, producto_nombre, precio, imagen, cantidad, cantidad],
+      (error, resultado) => {
+        if (error) {
+          console.error(error);
+          return res.status(500).send(error);
+        }
+        res.json({ message: 'Producto agregado al carrito', id: resultado.insertId });
+      }
+    );
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Eliminar producto del carrito
+router.delete('/cart/:userId/:productoNombre', verifyToken, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const productoNombre = req.params.productoNombre;
+
+    const query = 'DELETE FROM Carrito WHERE usuario_id = ? AND producto_nombre = ?';
+
+    conexion.query(query, [userId, productoNombre], (error, resultado) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).send(error);
+      }
+      res.json({ message: 'Producto eliminado del carrito' });
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Rutas para favoritos
+// Obtener favoritos de un usuario
+router.get('/favorites/:userId', verifyToken, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const query = 'SELECT * FROM Favoritos WHERE usuario_id = ?';
+
+    conexion.query(query, [userId], (error, resultados) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).send(error);
+      }
+      res.json(resultados);
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Añadir producto a favoritos
+router.post('/favorites/:userId', verifyToken, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { producto_nombre, precio, imagen } = req.body;
+
+    const query = `
+      INSERT INTO Favoritos (usuario_id, producto_nombre, producto_precio, producto_imagen)
+VALUES (?, ?, ?, ?)
+ON DUPLICATE KEY UPDATE producto_precio = ?, producto_imagen = ?
+    `;
+
+    conexion.query(
+      query,
+      [userId, producto_nombre, precio, imagen, precio, imagen],
+      (error, resultado) => {
+        if (error) {
+          console.error(error);
+          return res.status(500).send(error);
+        }
+        res.json({ message: 'Producto agregado a favoritos', id: resultado.insertId });
+      }
+    );
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Eliminar producto de favoritos
+router.delete('/favorites/:userId/:productoNombre', verifyToken, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const productoNombre = req.params.productoNombre;
+
+    const query = 'DELETE FROM Favoritos WHERE usuario_id = ? AND producto_nombre = ?';
+
+    conexion.query(query, [userId, productoNombre], (error, resultado) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).send(error);
+      }
+      res.json({ message: 'Producto eliminado de favoritos' });
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
+
+
 module.exports = router;
