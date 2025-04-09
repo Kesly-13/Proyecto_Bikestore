@@ -4,13 +4,30 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #6d438f;
+  background: linear-gradient(to right, #6d438f, #9932d4);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
   z-index: 1001;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
+header.scrolled {
+  height: 100px;
+  padding: 5px 20px;
+  background: linear-gradient(to right, #5b3478, #8832c4);
+}
+
+
+header.scrolled .logo {
+  width: 90px;      /* Reduce el tamaño del logo */
+  transition: width 0.3s ease, font-size 0.3s ease;
+}
+
+
 
 /* Estilo general para los iconos */
 .icon {
@@ -66,8 +83,7 @@ header {
 }
 
 #favoritesIcon:hover i {
-  color: #ff8800;
-  /* Fucsia oscuro */
+  color: #e74c3c; /* Fucsia oscuro */
 }
 
 /* Estilo para la burbuja de notificación */
@@ -82,21 +98,21 @@ header {
     right: 2px;
     font-weight: bold;
   } */
-
-.badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background-color: #ff8800;
-  color: white;
-  font-size: 12px;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  
+  .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #e74c3c;
+    color: white;
+    font-size: 12px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
 
 
@@ -161,6 +177,13 @@ header {
   border-bottom: 1px solid #eee;
   z-index: 1000;
   /* Menor que el header pero aún alto */
+}
+
+
+.nav-menu.scrolled {
+  top: 100px;  /* Se ajusta a la nueva altura del header */
+  padding: 5px 0;
+  /* background: linear-gradient(to right, #f8f8f8, #8832c4); */
 }
 
 .nav-menu ul {

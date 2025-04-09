@@ -1,0 +1,555 @@
+/* Variables de diseño para temas y colores */
+:root {
+    --primary-color: #6d438f;       
+    --secondary-color: #5a9c91; 
+    --background-color: #f5f5f5;   
+    --text-color: #333;             
+    --overlay-color: rgba(0, 0, 0, 0.4);  
+    
+    /* Colores para estados de disponibilidad */
+    --color-disponible: #2ecc71;
+    --color-agotado: #e74c3c;
+    --color-proxima-llegada: #f39c12;
+}
+
+/* Reset y estilos base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Contenedor principal del panel de administración */
+.admin-container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Barra lateral */
+.sidebar {
+    width: 250px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.logo span {
+    color: var(--secondary-color);
+}
+
+/* Botones de menú */
+.menu-btn {
+    width: 100%;
+    text-align: left;
+    padding: 15px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.menu-btn.active,
+.menu-btn:hover {
+    background-color: var(--secondary-color);
+    margin: 5px 0;
+}
+
+.menu-btn i {
+    font-size: 1.2rem;
+}
+
+.btn-cerrar-sesion {
+    width: 100%;
+    padding: 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-cerrar-sesion:hover {
+    background-color: #d32f2f;
+  }
+
+/* Área de contenido principal */
+.content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: var(--background-color);
+}
+
+/* Secciones */
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+/* Encabezados de sección */
+.content header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--primary-color);
+}
+
+.content h2 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+}
+
+/* Botón de nuevo */
+.btn-nuevo {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-nuevo:hover {
+    background-color: var(--primary-color);
+}
+
+/* Tabla de clientes */
+.table-container {
+    overflow-x: auto; /* Para responsividad en dispositivos pequeños */
+}
+
+#clientes-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+#clientes-table th,
+#clientes-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#clientes-table th {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+#clientes-table th:first-child {
+    border-top-left-radius: 8px;
+}
+
+#clientes-table th:last-child {
+    border-top-right-radius: 8px;
+}
+
+#clientes-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Botones de acción de clientes */
+.btn-editar-cliente,
+.btn-eliminar-cliente {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+    color: var(--primary-color);
+    transition: color 0.3s ease, background-color 0.3s ease;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.btn-editar-cliente:hover,
+.btn-eliminar-cliente:hover {
+    color: var(--secondary-color);
+    background-color: rgba(0,0,0,0.05);
+}
+
+/* Categorías de productos */
+.productos-categorias {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.categoria {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.categoria h3 {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid;
+    color: var(--primary-color);
+}
+
+.lista-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.producto {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: white;
+}
+
+.producto:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.producto-imagen {
+    height: 200px;
+    overflow: hidden;
+}
+
+.producto-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.producto-info {
+    padding: 10px;
+}
+
+.producto-info h4 {
+    margin-bottom: 5px;
+    color: var(--primary-color);
+}
+
+.producto-info .precio {
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.disponibilidad {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.disponibilidad.disponible {
+    background-color: var(--color-disponible);
+    color: white;
+}
+
+.disponibilidad.agotado {
+    background-color: var(--color-agotado);
+    color: white;
+}
+
+.disponibilidad.proxima-llegada {
+    background-color: var(--color-proxima-llegada);
+    color: white;
+}
+
+.producto-acciones {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.btn-ver-producto,
+.btn-editar-producto {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--primary-color);
+    transition: color 0.3s ease, background-color 0.3s ease;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.btn-ver-producto:hover,
+.btn-editar-producto:hover {
+    color: var(--secondary-color);
+    background-color: rgba(0,0,0,0.05);
+}
+
+/* Modales - Actualizado con efecto blur */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--overlay-color);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px); /* Efecto blur solicitado */
+}
+
+.modal-contenido {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90%;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.cerrar-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--primary-color);
+    z-index: 10;
+}
+
+/* Notificaciones */
+.notificacion {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 5px;
+    z-index: 1100;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.notificacion.success {
+    background-color: var(--color-disponible);
+}
+
+.notificacion.error {
+    background-color: var(--color-agotado);
+}
+
+/* Formularios - Actualizado para mejorar visualización */
+.form-grupo {
+    margin-bottom: 20px;
+}
+
+.form-grupo label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.form-grupo input,
+.form-grupo textarea,
+.form-grupo select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-grupo input:focus,
+.form-grupo textarea:focus,
+.form-grupo select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(109, 67, 143, 0.2);
+    outline: none;
+}
+
+.form-grupo textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-acciones {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.btn-guardar,
+.btn-cancelar {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+
+}
+
+.btn-guardar {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-guardar:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.btn-cancelar {
+    background-color: #f0f0f0;
+    color: var(--text-color);
+}
+
+.btn-cancelar:hover {
+    background-color: #e0e0e0;
+}
+
+/* Estilos para detalles de producto */
+.detalle-producto {
+    display: flex;
+    flex-direction: column;
+}
+
+.detalle-imagen {
+    width: 100%;
+    max-height: 300px;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.detalle-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.detalle-info h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.detalle-info .descripcion {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.detalle-precio {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.caracteristicas {
+    margin-top: 20px;
+}
+
+.caracteristicas h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.caracteristicas pre {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    font-family: inherit;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+    .admin-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        padding: 10px;
+    }
+    
+    .productos-categorias {
+        grid-template-columns: 1fr;
+    }
+    
+    .detalle-producto {
+        flex-direction: column;
+    }
+    
+    .btn-guardar, 
+    .btn-cancelar {
+        padding: 10px 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .content {
+        padding: 10px;
+    }
+    
+    .modal-contenido {
+        padding: 20px;
+        width: 95%;
+    }
+    
+    .lista-productos {
+        grid-template-columns: 1fr;
+    }
+}

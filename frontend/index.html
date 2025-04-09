@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/frontend/static/modals.css">
   <link rel="stylesheet" href="/frontend/static/responsive.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -17,25 +18,8 @@
   <!-- Contenedor para el Header y Nav -->
   <div id="header-container"></div>
 
-
-
-  <!-- Panel de Administración (solo visible para administradores) -->
-  <div id="adminPanel" style="display: none;">
-    <nav>
-      <ul>
-        <li><a href="/admin/dashboard.html">Dashboard</a></li>
-        <li><a href="/admin/gestionarProductos.html">Gestionar Productos</a></li>
-        <li><a href="/admin/gestionarUsuarios.html">Gestionar Usuarios</a></li>
-      </ul>
-    </nav>
-  </div>
-
-
-
-
-
   <!-- Estructura principal -->
-  <div class="container">
+  <div class="container animate">
     <!-- Barra lateral izquierda -->
     <aside class="sidebar-left">
       <div class="motivation-section">
@@ -66,8 +50,8 @@
           </div>
         </div>
         <div class="banner-nav">
-          <button class="prev-banner">←</button>
-          <button class="next-banner">→</button>
+          <button class="prev-banner">&#10094;</button>
+          <button class="next-banner">&#10095;</button>
         </div>
       </div>
       <div class="banner-pagination">
@@ -77,37 +61,56 @@
       </div>
 
 
-      <!-- Categorías -->
-      <div class="categories">
+       <!-- Categorías -->
+       <div class="categories animate">
         <div class="category-card">
-          <div class="category-image">CATEGORÍA</div>
-          <h3>Ropa Deportiva</h3>
+          <a href="/frontend/catalogo.html">
+            <div class="category-image">
+              <img src="/frontend/img/bici_categoria.jpg" alt="Bicicletas" />
+            </div>
+            <h3>Bicicletas</h3>
+          </a>
+        </div>
+
+        <div class="category-card">
+          <a href="/frontend/catalogo.html">
+            <div class="category-image">
+              <img src="/frontend/img/accesorios_categoria.jpeg" alt="Accesorios" />
+            </div>
+            <h3>Accesorios</h3>
+          </a>
+        </div>
+
+        <div class="category-card">
+          <a href="/frontend/catalogo.html">
+            <div class="category-image">
+              <img src="/frontend/img/repuestos_categoria.jpg" alt="Repuestos y componentes" />
+            </div>
+            <h3>Repuestos y componentes</h3>
+          </a>
         </div>
         <div class="category-card">
-          <div class="category-image">CATEGORÍA</div>
-          <h3>Equipamiento</h3>
-        </div>
-        <div class="category-card">
-          <div class="category-image">CATEGORÍA</div>
-          <h3>Suplementos</h3>
-        </div>
-        <div class="category-card">
-          <div class="category-image">CATEGORÍA</div>
-          <h3>Accesorios</h3>
+          <a href="/frontend/catalogo.html">
+            <div class="category-image">
+              <img src="/frontend/img/ropa_categoria.jpg" alt="Ropa de ciclismo" />
+            </div>
+            <h3>Ropa de ciclismo</h3>
+          </a>
         </div>
       </div>
 
       <!-- Productos Populares -->
-      <h2 class="popular-title">PRODUCTOS POPULARES</h2>
-      <div class="popular-products">
+      <h2 class="popular-title ">PRODUCTOS POPULARES</h2>
+      <div class="popular-products animate">
         <!-- Producto 1 -->
         <div class="product-card">
           <div class="product-image">
-            <img src="ruta-a-imagen-bicicleta-montana.jpg" alt="Bicicleta de Montaña X100">
+              <img src="ruta-a-imagen-bicicleta-montana.jpg" alt="Bicicleta de Montaña X100">
           </div>
           <h3 class="product-title">Bicicleta de Montaña X100</h3>
           <p class="product-price">COP $2.500.000</p>
-        </div>
+          <button class="add-to-cart">Agregar al carrito</button>
+      </div>
         <!-- Producto 2 -->
         <div class="product-card">
           <div class="product-image">
@@ -168,7 +171,7 @@
     </main>
 
     <!-- Barra lateral derecha -->
-    <aside class="sidebar-right">
+    <aside class="sidebar-right animate">
       <div class="promotion-section">
         <img src="/frontend/img/promocion.png" alt="Promoción">
         <div class="overlay">
@@ -181,7 +184,7 @@
   </div>
 
   <!-- Nuevos Lanzamientos -->
-  <section class="new-releases">
+  <section class="new-releases animate">
     <h2 class="section-title">NUEVOS LANZAMIENTOS</h2>
     <div class="releases-carousel">
       <!-- Producto 1 -->
@@ -300,33 +303,35 @@
   </section>
 
   <!-- Sección Nuestras Marcas -->
-  <section class="our-brands">
-    <h2 class="brands-title">Nuestras Marcas</h2>
-    <div class="brands-carousel">
-      <button class="nav-arrow prev-brand">←</button>
-      <div class="brands-container">
-        <div class="brand-item">
-          <img src="/img/img_marcas/trek_marca.png" alt="Trek">
-        </div>
-        <div class="brand-item">
-          <img src="/img/img_marcas/specialized_marca.png" alt="Specialized">
-        </div>
-        <div class="brand-item">
-          <img src="/img/img_marcas/giant_marca.png" alt="Giant">
-        </div>
-        <div class="brand-item">
-          <img src="/img/img_marcas/cannondale_marca.png" alt="Cannondale">
-        </div>
-        <div class="brand-item">
-          <img src="/img/img_marcas/scott_marca.png" alt="Scott">
-        </div>
-        <div class="brand-item">
-          <img src="/img/img_marcas/orbea_marca.png" alt="Orbea">
-        </div>
+ <!-- Sección Nuestras Marcas -->
+ <section class="our-brands">
+  <h2 class="brands-title">Nuestras Marcas</h2>
+  <div class="brands-carousel">
+    <button class="nav-arrow prev-brand">←</button>
+    <div class="brands-container">
+      <div class="brand-item">
+        <img src="/frontend/img/img_marcas/trek_marca.png" alt="Trek">
       </div>
-      <button class="nav-arrow next-brand">→</button>
+      <div class="brand-item">
+        <img src="/frontend/img/img_marcas/specialized_marca.png" alt="Specialized">
+      </div>
+      <div class="brand-item">
+        <img src="/frontend/img/img_marcas/giant_marca.png" alt="Giant">
+      </div>
+      <div class="brand-item">
+        <img src="/frontend/img/img_marcas/cannondale_marca.png" alt="Cannondale">
+      </div>
+      <div class="brand-item">
+        <img src="/frontend/img/img_marcas/scott_marca.png" alt="Scott">
+      </div>
+      <div class="brand-item">
+        <img src="/frontend/img/img_marcas/orbea_marca.png" alt="Orbea">
+      </div>
     </div>
-  </section>
+    <button class="nav-arrow next-brand">→</button>
+  </div>
+</section>
+
 
 
   <!-- Contenedor para el Footer -->

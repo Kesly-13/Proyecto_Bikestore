@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalizar Compra - BikeStore</title>
+  <link rel="stylesheet" href="/frontend/static/header_footer.css">
+  <link rel="stylesheet" href="/frontend/static/styles.css">
+  <link rel="stylesheet" href="/frontend/static/modals.css">
+  <link rel="stylesheet" href="/frontend/static/checkout.css">
+  <link rel="stylesheet" href="/frontend/static/responsive.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Contenedor para el Header y Nav -->
+  <div id="header-container"></div>
+
+  <main class="checkout-container">
+    <h1 class="page-title">Finalizar Compra</h1>
+
+    <div class="checkout-grid">
+      <!-- Sección del formulario de compra -->
+      <section class="checkout-form-section">
+        <form id="checkout-form">
+          <!-- Datos del cliente -->
+          <div class="form-section">
+            <h2>Información de Contacto</h2>
+            <div class="form-group">
+              <label for="nombre">Nombre completo</label>
+              <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="telefono">Teléfono</label>
+              <input type="tel" id="telefono" name="telefono" required>
+            </div>
+          </div>
+
+          <!-- Dirección de envío -->
+          <div class="form-section">
+            <h2>Dirección de Envío</h2>
+            <div class="form-group">
+              <label for="direccion">Dirección</label>
+              <input type="text" id="direccion" name="direccion" required>
+            </div>
+            <div class="form-group">
+              <label for="ciudad">Ciudad</label>
+              <input type="text" id="ciudad" name="ciudad" required>
+            </div>
+            <div class="form-group">
+              <label for="departamento">Departamento</label>
+              <select id="departamento" name="departamento" required>
+                <option value="">Selecciona un departamento</option>
+                <option value="Amazonas">Amazonas</option>
+                <option value="Antioquia">Antioquia</option>
+                <option value="Arauca">Arauca</option>
+                <option value="Atlántico">Atlántico</option>
+                <option value="Bogotá">Bogotá D.C.</option>
+                <option value="Bolívar">Bolívar</option>
+                <option value="Boyacá">Boyacá</option>
+                <option value="Caldas">Caldas</option>
+                <option value="Caquetá">Caquetá</option>
+                <option value="Casanare">Casanare</option>
+                <option value="Cauca">Cauca</option>
+                <option value="Cesar">Cesar</option>
+                <option value="Chocó">Chocó</option>
+                <option value="Córdoba">Córdoba</option>
+                <option value="Cundinamarca">Cundinamarca</option>
+                <option value="Guainía">Guainía</option>
+                <option value="Guaviare">Guaviare</option>
+                <option value="Huila">Huila</option>
+                <option value="La Guajira">La Guajira</option>
+                <option value="Magdalena">Magdalena</option>
+                <option value="Meta">Meta</option>
+                <option value="Nariño">Nariño</option>
+                <option value="Norte de Santander">Norte de Santander</option>
+                <option value="Putumayo">Putumayo</option>
+                <option value="Quindío">Quindío</option>
+                <option value="Risaralda">Risaralda</option>
+                <option value="San Andrés">San Andrés y Providencia</option>
+                <option value="Santander">Santander</option>
+                <option value="Sucre">Sucre</option>
+                <option value="Tolima">Tolima</option>
+                <option value="Valle del Cauca">Valle del Cauca</option>
+                <option value="Vaupés">Vaupés</option>
+                <option value="Vichada">Vichada</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Método de pago -->
+          <div class="form-section">
+            <h2>Método de Pago</h2>
+            <div class="payment-methods">
+              <div class="payment-option">
+                <input type="radio" id="tarjeta" name="metodo_pago" value="tarjeta" required>
+                <label for="tarjeta">
+                  <i class="fas fa-credit-card"></i>
+                  Tarjeta de Crédito/Débito
+                </label>
+              </div>
+
+              <div class="payment-option">
+                <input type="radio" id="pse" name="metodo_pago" value="pse">
+                <label for="pse">
+                  <i class="fas fa-university"></i>
+                  PSE
+                </label>
+              </div>
+
+              <div class="payment-option">
+                <input type="radio" id="efectivo" name="metodo_pago" value="efectivo">
+                <label for="efectivo">
+                  <i class="fas fa-money-bill-wave"></i>
+                  Pago Contra-entrega
+                </label>
+              </div>
+            </div>
+
+            <!-- Campos tarjeta de crédito (ocultos inicialmente) -->
+            <div id="tarjeta-fields" class="payment-details" style="display: none;">
+              <div class="form-group">
+                <label for="numero_tarjeta">Número de Tarjeta</label>
+                <input type="text" id="numero_tarjeta" name="numero_tarjeta" placeholder="XXXX XXXX XXXX XXXX">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="fecha_vencimiento">Vencimiento (MM/AA)</label>
+                  <input type="text" id="fecha_vencimiento" name="fecha_vencimiento" placeholder="MM/AA">
+                </div>
+                <div class="form-group">
+                  <label for="cvv">CVV</label>
+                  <input type="text" id="cvv" name="cvv" placeholder="XXX">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="nombre_tarjeta">Nombre en la tarjeta</label>
+                <input type="text" id="nombre_tarjeta" name="nombre_tarjeta">
+              </div>
+            </div>
+
+            <!-- Campos PSE (ocultos inicialmente) -->
+            <div id="pse-fields" class="payment-details" style="display: none;">
+              <div class="form-group">
+                <label for="banco">Banco</label>
+                <select id="banco" name="banco">
+                  <option value="">Seleccione su banco</option>
+                  <option value="bancolombia">Bancolombia</option>
+                  <option value="davivienda">Davivienda</option>
+                  <option value="bbva">BBVA</option>
+                  <option value="popular">Banco Popular</option>
+                  <option value="bogota">Banco de Bogotá</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="tipo_persona">Tipo de persona</label>
+                <select id="tipo_persona" name="tipo_persona">
+                  <option value="natural">Persona Natural</option>
+                  <option value="juridica">Persona Jurídica</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notas del pedido -->
+          <div class="form-section">
+            <h2>Notas del pedido (opcional)</h2>
+            <div class="form-group">
+              <textarea id="notas" name="notas" rows="3" placeholder="Instrucciones especiales para la entrega, etc."></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-complete-order">Completar Pedido</button>
+            <a href="productos.html" class="btn-continue-shopping">Seguir Comprando</a>
+          </div>
+        </form>
+      </section>
+
+      <!-- Resumen del pedido -->
+      <section class="order-summary-section">
+        <h2>Resumen del Pedido</h2>
+        <div id="order-items">
+          <!-- Aquí se insertarán los productos dinámicamente -->
+        </div>
+        <div class="order-totals">
+          <div class="subtotal-row">
+            <span>Subtotal</span>
+            <span id="subtotal">COP $0</span>
+          </div>
+          <div class="shipping-row">
+            <span>Envío</span>
+            <span id="shipping">COP $12,000</span>
+          </div>
+          <div class="tax-row">
+            <span>IVA (19%)</span>
+            <span id="tax">COP $0</span>
+          </div>
+          <div class="discount-row" id="discount-container" style="display: none;">
+            <span>Descuento</span>
+            <span id="discount">-COP $0</span>
+          </div>
+          <div class="total-row">
+            <span>Total</span>
+            <span id="total">COP $12,000</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Modal de confirmación -->
+  <div id="confirmation-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="confirmation-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h2>¡Pedido Confirmado!</h2>
+      <p>Tu pedido #<span id="order-number"></span> ha sido recibido.</p>
+      <p>Te hemos enviado un correo con los detalles de tu compra.</p>
+      <div class="confirmation-details">
+        <p><strong>Método de pago:</strong> <span id="payment-method"></span></p>
+        <p><strong>Dirección de envío:</strong> <span id="shipping-address"></span></p>
+        <p><strong>Total:</strong> <span id="confirmation-total"></span></p>
+      </div>
+      <div class="confirmation-actions">
+        <a href="index.html" class="btn-primary">Volver a la tienda</a>
+        <a href="mi-cuenta.html" class="btn-secondary">Ver mis pedidos</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor para el Footer -->
+  <div id="footer-container"></div>
+
+  <div id="modals-container"></div>
+  <script type="module" src="/frontend/js/main.js"></script>
+  <script type="module" src="/frontend/js/modules/checkout.js"></script>
+</body>
+
+</html>

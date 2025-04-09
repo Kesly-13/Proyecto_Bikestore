@@ -1,12 +1,34 @@
 // crud.js
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
 
 const verifyToken = require('./middlewares/verifyToken');
 const isAdmin = require('./middlewares/isAdmin');
 
 // Importamos la conexión a la base de datos
 const conexion = require('../db/connection');
+
+
+
+const fs = require('fs');
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, '..', 'uploads', 'productos');
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
+
+
+
 
 
 // Función para obtener todos los registros de una tabla
@@ -61,6 +83,249 @@ function eliminar(tabla, id) {
     });
   });
 }
+
+
+
+
+
+
+
+
+// Ruta para crear producto
+// routes/crud.js (modifica la ruta POST)
+// Ruta para crear producto
+router.post('/productos', verifyToken, isAdmin, upload.single('imagen'), (req, res) => {
+  console.log('Archivo recibido:', req.file);
+  console.log('Datos recibidos:', req.body);
+  
+  const categoriasPermitidas = [
+      'bicicletas',
+      'ropa_deportiva', 
+      'equipamiento',
+      'suplementos',
+      'accesorios'
+  ];
+
+  if (!categoriasPermitidas.includes(req.body.categoria)) {
+      return res.status(400).json({ error: 'Categoría no válida' });
+  }
+
+  const { file } = req; // Archivo subido
+  const { nombre, categoria, marca, disponibilidad, descripcion, caracteristicas } = req.body;
+
+  const precio = parseFloat(req.body.precio);
+  const stock = parseInt(req.body.stock) || 0;
+    
+  // Validación adicional
+  if (isNaN(precio)) {
+      return res.status(400).json({ error: 'El precio debe ser un número válido' });
+  }
+  
+  if (isNaN(stock) || stock < 0) {
+      return res.status(400).json({ error: 'El stock debe ser un número mayor o igual a cero' });
+  }
+
+  const productoData = {
+      nombre: req.body.nombre,
+      categoria: req.body.categoria,
+      marca: req.body.marca || null,
+      precio: precio,
+      stock: stock,
+      disponibilidad: req.body.disponibilidad,
+      descripcion: req.body.descripcion || null,
+      caracteristicas: req.body.caracteristicas || null,
+      imagen: req.file ? req.file.filename : 'default.jpg'
+  };
+
+  // Validación de campos requeridos
+  if (!nombre || !categoria || !precio || !disponibilidad) {
+    return res.status(400).json({ error: 'Campos requeridos faltantes' });
+  }
+
+  const query = `
+    INSERT INTO Productos (nombre, categoria, marca, precio, stock, disponibilidad, descripcion, caracteristicas, imagen)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  conexion.query(query, [
+    nombre,
+    categoria,
+    marca || null,
+    parseFloat(precio),
+    stock,
+    disponibilidad,
+    descripcion || null,
+    caracteristicas || null,
+    file ? file.filename : 'default.jpg'
+  ], (error, resultados) => {
+    if (error) {
+      console.error('Error en la consulta SQL:', error);
+      return res.status(500).json({ error: 'Error en la base de datos' });
+    }
+    res.json({ 
+      id: resultados.insertId,
+      nombre,
+      categoria,
+      marca,
+      precio,
+      stock,
+      disponibilidad,
+      imagen: file ? file.filename : 'default.jpg'
+    });
+  });
+});
+
+// Ruta para actualizar producto
+router.put('/productos/:id', verifyToken, isAdmin, upload.single('imagen'), (req, res) => {
+  const { id } = req.params;
+  const { nombre, categoria, marca, precio, stock, disponibilidad, descripcion, caracteristicas } = req.body;
+  let imagen = req.body.imagen;
+
+  const categoriasPermitidas = [
+    'bicicletas',
+    'ropa_deportiva',
+    'equipamiento',
+    'suplementos',
+    'accesorios'
+  ];
+
+  if (!categoriasPermitidas.includes(req.body.categoria)) {
+      return res.status(400).json({ error: 'Categoría no válida' });
+  }
+
+  if (req.file) {
+    imagen = req.file.filename;
+  }
+
+  const query = `
+    UPDATE Productos SET
+    nombre = ?,
+    categoria = ?,
+    marca = ?,
+    precio = ?,
+    stock = ?,
+    disponibilidad = ?,
+    descripcion = ?,
+    caracteristicas = ?,
+    imagen = ?
+    WHERE id = ?
+  `;
+
+  conexion.query(query,
+    [nombre, categoria, marca, precio, stock, disponibilidad, descripcion, caracteristicas, imagen, id],
+    (error) => {
+      if (error) return res.status(500).json({ error: 'Error al actualizar producto' });
+      res.json({ success: true });
+    }
+  );
+});
+
+// Ruta para obtener productos con filtros
+router.get('/productos', (req, res) => {
+  const categoriasValidas = [
+      'bicicletas',
+      'ropa_deportiva',
+      'equipamiento',
+      'suplementos',
+      'accesorios'
+  ];
+  
+  if (req.query.categoria && !categoriasValidas.includes(req.query.categoria)) {
+      return res.status(400).json({ error: 'Categoría no válida' });
+  }
+
+  const { categoria } = req.query;
+  let query = 'SELECT * FROM Productos';
+  const params = [];
+
+  if (categoria) {
+    query += ' WHERE categoria = ?';
+    params.push(categoria);
+  }
+
+  conexion.query(query, params, (error, resultados) => {
+    if (error) return res.status(500).json({ error: 'Error al obtener productos' });
+    res.json(resultados);
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+// Ruta para filtrar productos (requiere autenticación si es necesario)
+router.get('/productos/filtrar', verifyToken, (req, res) => {
+  // Extraer parámetros de consulta
+  const { categorias, marcas, precios } = req.query;
+  let query = "SELECT * FROM Productos";
+  const queryParams = [];
+
+  const conditions = [];
+
+  // Filtrar por categorías si se envían
+  if (categorias) {
+    const cats = categorias.split(",");
+    conditions.push(`categoria IN (${cats.map(() => "?").join(",")})`);
+    queryParams.push(...cats);
+  }
+
+  // Filtrar por marcas si se envían
+  if (marcas) {
+    const brandList = marcas.split(",");
+    conditions.push(`marca IN (${brandList.map(() => "?").join(",")})`);
+    queryParams.push(...brandList);
+  }
+
+  // Filtrar por rangos de precios (ejemplo simple: se espera un string que se pueda transformar a condiciones)
+  if (precios) {
+    const priceRanges = precios.split(",");
+    // Aquí se puede implementar lógica para cada rango; a título de ejemplo:
+    // Si se envía "$0 - $50", se asume que los precios están en una escala establecida
+    priceRanges.forEach(range => {
+      if (range.includes("$0 - $50")) {
+        conditions.push("precio BETWEEN ? AND ?");
+        queryParams.push(0, 50);
+      } else if (range.includes("$50 - $100")) {
+        conditions.push("precio BETWEEN ? AND ?");
+        queryParams.push(50, 100);
+      } else if (range.includes("$100 - $200")) {
+        conditions.push("precio BETWEEN ? AND ?");
+        queryParams.push(100, 200);
+      } else if (range.includes("$200+")) {
+        conditions.push("precio >= ?");
+        queryParams.push(200);
+      }
+    });
+  }
+
+  if (conditions.length > 0) {
+    query += " WHERE " + conditions.join(" AND ");
+  }
+
+  conexion.query(query, queryParams, (error, resultados) => {
+    if (error) {
+      console.error("Error al filtrar productos:", error);
+      return res.status(500).json({ error: "Error en la consulta de filtrado" });
+    }
+    res.json(resultados);
+  });
+});
+
+
+
+
+
+
+
+
+
+
 
 // Rutas CRUD
 

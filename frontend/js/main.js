@@ -6,7 +6,21 @@ import { filtrarProductos } from './modules/filters.js';
 import { updateUIBasedOnAuth } from './modules/ui.js';
 
 document.addEventListener("DOMContentLoaded", function () {
-
+  window.addEventListener('scroll', function() {
+    const header = document.querySelector('header');
+    const navMenu = document.querySelector('.nav-menu');
+    const scrollPos = window.pageYOffset;
+    document.querySelectorAll('.motivation-section img, .promotion-section img').forEach(img => {
+      img.style.transform = `translateY(${scrollPos * 0.1}px)`;
+    });
+    if (window.scrollY > 50) {
+      header.classList.add('scrolled');
+      navMenu.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+      navMenu.classList.remove('scrolled');
+    }
+  });
   // Primero cargar header y footer
   loadHeaderFooter()
     .then(() => {

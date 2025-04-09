@@ -206,7 +206,7 @@ export async function login(email, password) {
 
       // Si el usuario es admin, redirige a la página de dashboard; de lo contrario, actualiza la UI
       if (role === 'admin') {
-        window.location.href = '/admin/dashboard.html';
+        window.location.href = './templates/panel_admin/index.html';
       } else {
         updateUIBasedOnAuth();
       }
@@ -251,5 +251,5 @@ export function logout() {
   updateUIBasedOnAuth();
 
   // Redirigir a la página principal
-  window.location.href = window.location.origin + './templates/index.html';
+  window.location.href = `${window.location.origin}/frontend/index.html`;
 }

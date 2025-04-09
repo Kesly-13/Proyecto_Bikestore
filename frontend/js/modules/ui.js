@@ -5,6 +5,8 @@
  * @param {string} texto - El mensaje a mostrar
  * @param {number} duracion - Duración en milisegundos (por defecto 2000ms)
  */
+
+import { logout } from './auth.js';
 export function mostrarMensaje(texto, duracion = 2000) {
   // Eliminar mensaje existente si hay uno
   const mensajeExistente = document.querySelector(".mensaje-confirmacion");
@@ -428,24 +430,55 @@ export function initBrandsCarousel() {
   }
 
   const brandWidth = 170; // Ancho de cada elemento marca en píxeles
+  let currentIndex = 0;
+  let brandsInterval;
+
+  // Clonar los elementos para el efecto infinito
+  const brands = Array.from(brandsContainer.children);
+  brands.forEach(brand => {
+    const clone = brand.cloneNode(true);
+    brandsContainer.appendChild(clone);
+  });
+
+  // Función para mover el carrusel
+  function moveCarousel() {
+    currentIndex++;
+    if (currentIndex >= brandsContainer.children.length / 2) {
+      currentIndex = 0; // Reiniciar al inicio
+      brandsContainer.scrollTo({ left: 0, behavior: 'smooth' }); // Reiniciar la posición
+    }
+    brandsContainer.scrollBy({
+      left: brandWidth,
+      behavior: 'smooth'
+    });
+  }
+
+  // Iniciar el intervalo para mover el carrusel
+  brandsInterval = setInterval(moveCarousel, 3000); // Cambia cada 3 segundos
 
   // Configurar navegación anterior
   if (prevBrandButton) {
     prevBrandButton.addEventListener("click", () => {
+      clearInterval(brandsInterval); // Detener el intervalo al hacer clic
       brandsContainer.scrollBy({
         left: -brandWidth * 2,
         behavior: 'smooth'
       });
+      currentIndex = (currentIndex - 1 + brands.length) % brands.length; // Actualizar índice
+      brandsInterval = setInterval(moveCarousel, 3000); // Reiniciar el intervalo
     });
   }
 
   // Configurar navegación siguiente
   if (nextBrandButton) {
     nextBrandButton.addEventListener("click", () => {
+      clearInterval(brandsInterval); // Detener el intervalo al hacer clic
       brandsContainer.scrollBy({
         left: brandWidth * 2,
         behavior: 'smooth'
       });
+      currentIndex = (currentIndex + 1) % brands.length; // Actualizar índice
+      brandsInterval = setInterval(moveCarousel, 3000); // Reiniciar el intervalo
     });
   }
 

@@ -76,8 +76,8 @@ export function actualizarCarritoModal() {
   }
 
   carrito.forEach((producto, index) => {
-    // Calcula el total considerando la cantidad de cada producto
-    const precioNumerico = parseInt(producto.precio.replace(/[^\d]/g, ""));
+    // Verificar que el precio esté definido
+    const precioNumerico = producto.precio ? parseInt(producto.precio.replace(/[^\d]/g, "")) : 0;
     total += precioNumerico * (producto.cantidad || 1);
 
     const itemDiv = document.createElement("div");
@@ -86,7 +86,7 @@ export function actualizarCarritoModal() {
     itemDiv.innerHTML = `
       <div class="item-details">
         <h4>${producto.nombre}</h4>
-        <p>${producto.precio}</p>
+        <p>${producto.precio || 'Precio no disponible'}</p>
         <div class="quantity-controls">
           <button class="decrement" data-index="${index}">-</button>
           <span class="quantity">${producto.cantidad || 1}</span>
@@ -100,7 +100,7 @@ export function actualizarCarritoModal() {
   });
 
   cartTotal.innerHTML = `<strong>Total: COP $${total.toLocaleString()}</strong>
-    <a href="carrito.html" class="checkout-btn">Finalizar compra</a>`;
+    <a href="/frontend/compra.html" class="checkout-btn">Finalizar compra</a>`;
 
   // Agregar event listener para eliminar productos (asegurando que no se cierre el modal)
   document.querySelectorAll(".remove-item").forEach(button => {
