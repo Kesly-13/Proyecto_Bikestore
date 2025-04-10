@@ -524,4 +524,23 @@ router.delete('/favorites/:userId/:productoNombre', verifyToken, async (req, res
 
 
 
+router.get('/productos/validar/:id', (req, res) => {
+  conexion.query(
+    'SELECT id FROM Productos WHERE id = ?',
+    [req.params.id],
+    (error, resultados) => {
+      if (error || resultados.length === 0) {
+        return res.status(404).json({ valido: false });
+      }
+      res.json({ valido: true });
+    }
+  );
+});
+
+
+
+
+
+
+
 module.exports = router;

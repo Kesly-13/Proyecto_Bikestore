@@ -5,20 +5,24 @@ import { actualizarCarritoEnBD } from './syncManager.js';
 
 
 
-
 export function initCarrito() {
-  // Seleccionar tanto botones con clase add-to-cart como release-button
   document.querySelectorAll('.add-to-cart, .release-button').forEach(button => {
     button.addEventListener('click', () => {
-      // Determinar si es una tarjeta de producto o una de release
       const productCard = button.closest('.product-card, .release-card');
+      
+      // Obtener datos incluyendo el ID
+      const productId = button.getAttribute('data-id'); // 🆕 Nueva línea
       const productName = productCard.querySelector('.product-title, .release-title').textContent;
       const productPrice = productCard.querySelector('.product-price, .release-price').textContent;
       const productImage = productCard.querySelector('img')?.src || '';
 
-      // Llamar a la función para agregar al carrito
-      agregarAlCarrito(productName, productPrice, productImage);
-      console.log(`Producto agregado: ${productName}`);
+      // Pasar el ID al carrito
+      agregarAlCarrito({ 
+        id: productId,
+        nombre: productName,
+        precio: productPrice,
+        imagen: productImage
+      });
     });
   });
 }
@@ -33,30 +37,73 @@ export function actualizarContadorCarrito() {
 }
 
 
-export function agregarAlCarrito(nombre, precio, imagen) {
-  let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-  const productoExistente = carrito.find(item => item.nombre === nombre);
-
-  if (productoExistente) {
-    mostrarMensaje("El producto ya está en el carrito");
-    return;
+// Función para agregar productos al carrito
+export function agregarAlCarrito(producto) {
+  // Obtener el carrito actual
+  if (!producto.id) {
+    mostrarMensaje('Error: Producto no válido', 3000);
+    throw new Error('El producto no tiene un ID válido');
   }
-
-  const nuevoItem = {
-    nombre,
-    precio,
-    imagen,
-    cantidad: 1
-  };
-
-  carrito.push(nuevoItem);
-
-  localStorage.setItem("carrito", JSON.stringify(carrito));
+  
+  let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+  
+  // Asegurarnos de que el producto tenga un ID
+  if (!producto.id) {
+    console.error('Advertencia: Producto sin ID detectado', producto);
+    // Si no hay ID, podemos intentar generar uno temporal o rechazar la adición
+    // En un escenario real, todos los productos deberían tener ID desde la base de datos
+  }
+  
+  // Verificar si el producto ya está en el carrito
+  const productoExistente = carrito.findIndex(item => item.nombre === producto.nombre);
+  
+  if (productoExistente !== -1) {
+    // Si el producto ya existe, incrementamos la cantidad
+    carrito[productoExistente].cantidad = (carrito[productoExistente].cantidad || 1) + 1;
+    
+    // Asegurarnos de que tenga ID (por si se agregó antes sin ID)
+    if (producto.id && !carrito[productoExistente].id) {
+      carrito[productoExistente].id = producto.id;
+    }
+  } else {
+    // Si es un producto nuevo, lo agregamos al carrito con cantidad 1
+    carrito.push({
+      id: producto.id, // Asegurarnos de incluir el ID
+      nombre: producto.nombre,
+      precio: producto.precio,
+      imagen: producto.imagen,
+      cantidad: 1
+    });
+  }
+  
+  // Guardar el carrito actualizado
+  localStorage.setItem('carrito', JSON.stringify(carrito));
+  
+  // Actualizar el contador del carrito en la UI
   actualizarContadorCarrito();
-  mostrarMensaje("¡Producto agregado al carrito!");
-
-  // Intentar actualizar en base de datos si hay sesión activa
-  actualizarCarritoEnBD(nuevoItem, 'agregar');
+  
+  // Sincronizar con la base de datos si hay un usuario logueado
+  const token = localStorage.getItem('token');
+  if (token) {
+    try {
+      // Decodificar el token para obtener el ID del usuario
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const userId = payload.id;
+      
+      // Actualizar en la base de datos
+      actualizarCarritoEnBD({
+        id: producto.id, // Incluir ID aquí también
+        nombre: producto.nombre,
+        precio: producto.precio,
+        imagen: producto.imagen,
+        cantidad: 1
+      }, 'agregar');
+    } catch (error) {
+      console.error('Error al sincronizar con BD:', error);
+    }
+  }
+  
+  return carrito;
 }
 
 export function actualizarCarritoModal() {

@@ -13,6 +13,7 @@ role VARCHAR(50) DEFAULT 'cliente',
 fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+SELECT role FROM usuarios WHERE id = 5
 
 
 
@@ -120,6 +121,7 @@ CREATE TABLE pedidos (
   metodo_pago VARCHAR(50) NOT NULL,
   total DECIMAL(10, 2) NOT NULL,
   notas TEXT,
+  info_contacto json,
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
@@ -149,12 +151,22 @@ CREATE TABLE ventas (
 
 
 
+
+
+-- Actualizar tabla pedidos para añadir info_contacto
+ALTER TABLE pedidos ADD COLUMN info_contacto JSON;
+
+-- Modificar detalle_pedidos para usar producto_nombre en lugar de producto_id
+ALTER TABLE detalle_pedidos CHANGE COLUMN producto_id producto_nombre VARCHAR(255);
+
 SELECT * FROM Usuarios;
 SELECT id, email, role FROM clientes WHERE email = 'admin@example.com';
-SHOW COLUMNS FROM clientes;
+SHOW COLUMNS FROM pedidos;
+SHOW COLUMNS FROM detalle_pedidos;
+SHOW COLUMNS FROM ventas;
 
 SELECT * FROM Carrito;
 SELECT * FROM Favoritos;
 
-SELECT * FROM Carrito WHERE usuario_id = 1;
+SELECT * FROM Carrito WHERE usuario_id = 3;
 SELECT * FROM Favoritos WHERE usuario_id = 1;

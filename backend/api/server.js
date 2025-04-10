@@ -19,6 +19,11 @@ app.use("/api", crudRoutes);
 const adminRoutes = require("./routes/admin");
 app.use("/admin", adminRoutes);
 
+// server.js (fragmento)
+const checkoutRoutes = require("./routes/checkout");
+app.use("/api", checkoutRoutes);
+
+
 // Ruta de inicio (opcional)
 app.get("/", (req, res) => {
   res.send("Ruta Inicio");
