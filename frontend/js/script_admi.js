@@ -1,10 +1,12 @@
+/* ===================== ADMINISTRACIÓN ===================== */
+/* Funcionalidades para la sección de administración:
+   - Gestión de usuarios (listar, crear, editar, eliminar)
+   - Gestión de productos (listar, crear, editar)
+   - Manejo de autenticación, navegación y notificaciones
+*/
 document.addEventListener('DOMContentLoaded', function () {
     // Configuración de modo de prueba
-    const modoPrueba = false; // Cambiado a false para usar datos reales
-
-    // API Base URL
-    const API_BASE = 'http://localhost:3000';
-
+    
     // Elementos del DOM para navegación
     const menuBtns = document.querySelectorAll('.menu-btn');
     const sections = document.querySelectorAll('.section');
@@ -13,18 +15,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const usuariosTable = document.getElementById('usuarios-tbody');
     const btnNuevoUsuario = document.getElementById('btn-nuevo-usuario');
     
-    const modalCliente = document.getElementById('modal-cliente');
-    const formCliente = document.getElementById('formulario-cliente');
-    const cerrarModalCliente = modalCliente.querySelector('.cerrar-modal');
-    const tituloModalCliente = document.getElementById('titulo-modal-cliente');
-    const cancelarCliente = document.getElementById('cancelar-cliente');
+    const modalUsuario = document.getElementById('modal-usuario'); // Cambiado de modalCliente a modalUsuario
+    const formUsuario = document.getElementById('formulario-usuario'); // Cambiado de formCliente a formUsuario
+    const cerrarModalUsuario = modalUsuario ? modalUsuario.querySelector('.cerrar-modal') : null; // Validación añadida
+    const tituloModalUsuario = document.getElementById('titulo-modal-usuario'); // Cambiado de tituloModalCliente a tituloModalUsuario
+    const cancelarUsuario = document.getElementById('cancelar-usuario'); // Cambiado de cancelarCliente a cancelarUsuario
 
     // Elementos para productos
     const btnNuevoProducto = document.getElementById('btn-nuevo-producto');
     const modalProducto = document.getElementById('modal-producto');
     const formProducto = document.getElementById('formulario-producto');
-    const cerrarModalProducto = modalProducto.querySelector('.cerrar-modal');
-    const tituloCModalProducto = document.getElementById('titulo-modal-producto');
+    const cerrarModalProducto = modalProducto ? modalProducto.querySelector('.cerrar-modal') : null; // Validación añadida
+    const tituloModalProducto = document.getElementById('titulo-modal-producto'); // Corregido de tituloCModalProducto a tituloModalProducto
+    const cancelarProducto = document.getElementById('cancelar-producto');
 
     // Modal de detalles de producto
     const modalDetalleProducto = document.getElementById('modal-detalle-producto');
@@ -34,6 +37,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const notificacion = document.getElementById('notificacion');
 
     const btnCerrarSesion = document.getElementById('btn-cerrar-sesion');
+
+
+
+    const modoPrueba = false;
+    const API_BASE = 'http://localhost:3000';
+    
+    
+    // Función para mostrar notificaciones (asegúrate de que está definida)
+    function mostrarNotificacion(mensaje, tipo) {
+        if (!notificacion) return;
+        
+        notificacion.textContent = mensaje;
+        notificacion.className = `notificacion ${tipo}`;
+        notificacion.style.display = 'block';
+
+        setTimeout(() => {
+            notificacion.style.display = 'none';
+        }, 3000);
+    }
+
+
+    // Array para almacenar los productos obtenidos
+    let productos = []; // Definición del array productos
 
     // Verificar autenticación
     function verificarAutenticacion() {
@@ -47,12 +73,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // Verificar al cargar
     verificarAutenticacion();
 
-    btnNuevoProducto.addEventListener('click', function() {
-        tituloCModalProducto.textContent = 'Registrar Nuevo Producto';
-        document.getElementById('producto-id').value = '';
-        formProducto.reset();
-        modalProducto.style.display = 'flex';
-    });
+    // Verificar si el botón existe antes de añadir el evento
+    if (btnNuevoProducto) {
+        btnNuevoProducto.addEventListener('click', function() {
+            tituloModalProducto.textContent = 'Registrar Nuevo Producto';
+            document.getElementById('producto-id').value = '';
+            formProducto.reset();
+            modalProducto.style.display = 'flex';
+        });
+    }
 
     // Navegación entre secciones
     menuBtns.forEach(btn => {
@@ -63,12 +92,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Activar el botón y sección seleccionados
             this.classList.add('active');
-            document.getElementById(this.dataset.section).classList.add('active');
+            const seccionId = this.dataset.section;
+            const seccion = document.getElementById(seccionId);
+            
+            // Verificar que la sección existe
+            if (seccion) {
+                seccion.classList.add('active');
+            }
 
             // Si se selecciona la sección de usuarios, actualizarlos
-            if (this.dataset.section === 'usuarios') {
+            if (seccionId === 'usuarios') {
                 renderizarUsuarios();
-            } else if (this.dataset.section === 'productos') {
+            } else if (seccionId === 'productos') {
                 renderizarProductos();
             }
         });
@@ -93,29 +128,31 @@ document.addEventListener('DOMContentLoaded', function () {
             const usuarios = await response.json();
             
             // Limpiar tabla
-            usuariosTable.innerHTML = '';
-            
-            usuarios.forEach(usuario => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${usuario.nombre}</td>
-                    <td>${usuario.email}</td>
-                    <td>${usuario.telefono || '-'}</td>
-                    <td>${usuario.direccion || '-'}</td>
-                    <td>
-                        <button class="btn-editar-usuario" data-id="${usuario.id}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn-eliminar-usuario" data-id="${usuario.id}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                usuariosTable.appendChild(row);
-            });
-            
-            // Configurar botones de acciones
-            configurarAccionesUsuarios();
+            if (usuariosTable) {
+                usuariosTable.innerHTML = '';
+                
+                usuarios.forEach(usuario => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${usuario.nombre}</td>
+                        <td>${usuario.email}</td>
+                        <td>${usuario.telefono || '-'}</td>
+                        <td>${usuario.direccion || '-'}</td>
+                        <td>
+                            <button class="btn-editar-usuario" data-id="${usuario.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-eliminar-usuario" data-id="${usuario.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    usuariosTable.appendChild(row);
+                });
+                
+                // Configurar botones de acciones
+                configurarAccionesUsuarios();
+            }
             
         } catch (error) {
             console.error('Error obteniendo usuarios:', error);
@@ -130,6 +167,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Función para mostrar datos de ejemplo en caso de error
     function mostrarUsuariosEjemplo() {
+        if (!usuariosTable) return;
+        
         const usuariosEjemplo = [
             { id: "1", nombre: "Kesly Labio Otero", email: "kesly.labio@gmail.com", telefono: "323 490 7319", direccion: "Carrera 25 #15-50, Medellín" },
             { id: "2", nombre: "Cristina Lopéz", email: "cristina.lopez@gmail.com", telefono: "315 987 6543", direccion: "Calle 10 #20-30, Cartagena" },
@@ -178,16 +217,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     
                     const usuario = await response.json();
                     
-                    // Llenar formulario
-                    document.getElementById('cliente-id').value = usuario.id;
-                    document.getElementById('cliente-nombre').value = usuario.nombre;
-                    document.getElementById('cliente-correo').value = usuario.email;
-                    document.getElementById('cliente-telefono').value = usuario.telefono || '';
-                    document.getElementById('cliente-direccion').value = usuario.direccion || '';
+                    // Verificar que los elementos existan antes de asignar valores
+                    const usuarioId = document.getElementById('usuario-id');
+                    const usuarioNombre = document.getElementById('usuario-nombre');
+                    const usuarioCorreo = document.getElementById('usuario-correo');
+                    const usuarioTelefono = document.getElementById('usuario-telefono');
+                    const usuarioDireccion = document.getElementById('usuario-direccion');
+                    
+                    // Llenar formulario usando los IDs correctos
+                    if (usuarioId) usuarioId.value = usuario.id;
+                    if (usuarioNombre) usuarioNombre.value = usuario.nombre;
+                    if (usuarioCorreo) usuarioCorreo.value = usuario.email;
+                    if (usuarioTelefono) usuarioTelefono.value = usuario.telefono || '';
+                    if (usuarioDireccion) usuarioDireccion.value = usuario.direccion || '';
                     
                     // Mostrar modal
-                    tituloModalCliente.textContent = 'Editar Usuario';
-                    modalCliente.style.display = 'flex';
+                    if (tituloModalUsuario) tituloModalUsuario.textContent = 'Editar Usuario';
+                    if (modalUsuario) modalUsuario.style.display = 'flex';
                     
                 } catch (error) {
                     console.error('Error:', error);
@@ -203,14 +249,20 @@ document.addEventListener('DOMContentLoaded', function () {
                             direccion: "Dirección de ejemplo"
                         };
                         
-                        document.getElementById('cliente-id').value = usuarioEjemplo.id;
-                        document.getElementById('cliente-nombre').value = usuarioEjemplo.nombre;
-                        document.getElementById('cliente-correo').value = usuarioEjemplo.email;
-                        document.getElementById('cliente-telefono').value = usuarioEjemplo.telefono;
-                        document.getElementById('cliente-direccion').value = usuarioEjemplo.direccion;
+                        const usuarioId = document.getElementById('usuario-id');
+                        const usuarioNombre = document.getElementById('usuario-nombre');
+                        const usuarioCorreo = document.getElementById('usuario-correo');
+                        const usuarioTelefono = document.getElementById('usuario-telefono');
+                        const usuarioDireccion = document.getElementById('usuario-direccion');
                         
-                        tituloModalCliente.textContent = 'Editar Usuario';
-                        modalCliente.style.display = 'flex';
+                        if (usuarioId) usuarioId.value = usuarioEjemplo.id;
+                        if (usuarioNombre) usuarioNombre.value = usuarioEjemplo.nombre;
+                        if (usuarioCorreo) usuarioCorreo.value = usuarioEjemplo.email;
+                        if (usuarioTelefono) usuarioTelefono.value = usuarioEjemplo.telefono;
+                        if (usuarioDireccion) usuarioDireccion.value = usuarioEjemplo.direccion;
+                        
+                        if (tituloModalUsuario) tituloModalUsuario.textContent = 'Editar Usuario';
+                        if (modalUsuario) modalUsuario.style.display = 'flex';
                     }
                 }
             });
@@ -252,115 +304,113 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Manejo de formulario de usuario
-  // Modificaciones para script_admi.js
-
-// Actualizar el formulario de cliente para manejar contraseñas
-formCliente.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const id = document.getElementById('cliente-id').value;
-    const nombre = document.getElementById('cliente-nombre').value;
-    const email = document.getElementById('cliente-correo').value;
-    const telefono = document.getElementById('cliente-telefono').value;
-    const direccion = document.getElementById('cliente-direccion').value;
-    const contraseña = document.getElementById('cliente-contraseña').value; // Campo nuevo
-    
-    // Validar campos obligatorios
-    if (!nombre || !email) {
-        mostrarNotificacion('Nombre y correo electrónico son obligatorios', 'error');
-        return;
-    }
-    
-    // Crear objeto de datos
-    const userData = {
-        nombre,
-        email,
-        telefono,
-        direccion,
-        contraseña: contraseña || 'Temporal123', // Asegurar contraseña
-        role: 'cliente'
-    };
-    
-    
-    // Si es nuevo usuario, incluir contraseña predeterminada
-    if (!id) {
-        userData.contraseña = 'Temporal123'; // Contraseña temporal para nuevos usuarios
-        userData.role = 'cliente'; // Rol por defecto
-    }
-    
-    try {
-        const token = localStorage.getItem('token');
-        const url = id 
-            ? `${API_BASE}/admin/usuarios/${id}` 
-            : `${API_BASE}/admin/usuarios`;
-        
-        const method = id ? 'PUT' : 'POST';
-        
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(userData)
+    // Manejo de formulario de usuario: actualización y creación con validación y notificaciones
+    if (formUsuario) {
+        formUsuario.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Usar los IDs correctos para obtener los valores del formulario
+            const usuarioId = document.getElementById('usuario-id');
+            const usuarioNombre = document.getElementById('usuario-nombre');
+            const usuarioCorreo = document.getElementById('usuario-correo');
+            const usuarioTelefono = document.getElementById('usuario-telefono');
+            const usuarioDireccion = document.getElementById('usuario-direccion');
+            
+            const id = usuarioId ? usuarioId.value : '';
+            const nombre = usuarioNombre ? usuarioNombre.value : '';
+            const email = usuarioCorreo ? usuarioCorreo.value : '';
+            const telefono = usuarioTelefono ? usuarioTelefono.value : '';
+            const direccion = usuarioDireccion ? usuarioDireccion.value : '';
+            
+            // Validar campos obligatorios
+            if (!nombre || !email) {
+                mostrarNotificacion('Nombre y correo electrónico son obligatorios', 'error');
+                return;
+            }
+            
+            // Crear objeto de datos
+            const userData = {
+                nombre,
+                email,
+                telefono,
+                direccion,
+                contraseña: 'Temporal123', // Asegurar contraseña
+                role: 'cliente'
+            };
+            
+            try {
+                const token = localStorage.getItem('token');
+                const url = id 
+                    ? `${API_BASE}/admin/usuarios/${id}` 
+                    : `${API_BASE}/admin/usuarios`;
+                
+                const method = id ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(userData)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Error en la operación');
+                }
+                
+                mostrarNotificacion(
+                    id ? 'Usuario actualizado correctamente' : 'Usuario creado correctamente', 
+                    'success'
+                );
+                
+                // Cerrar modal y resetear formulario
+                if (modalUsuario) modalUsuario.style.display = 'none';
+                formUsuario.reset();
+                
+                // Actualizar lista de usuarios
+                renderizarUsuarios();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarNotificacion(`Error: ${error.message}`, 'error');
+            }
         });
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Error en la operación');
-        }
-        
-        mostrarNotificacion(
-            id ? 'Usuario actualizado correctamente' : 'Usuario creado correctamente', 
-            'success'
-        );
-        
-        // Cerrar modal y resetear formulario
-        modalCliente.style.display = 'none';
-        formCliente.reset();
-        
-        // Actualizar lista de usuarios
-        renderizarUsuarios();
-        
-    } catch (error) {
-        console.error('Error:', error);
-        mostrarNotificacion(`Error: ${error.message}`, 'error');
     }
-});
 
     // Botón para abrir modal de nuevo usuario
-    btnNuevoUsuario.addEventListener('click', function() {
-        tituloModalCliente.textContent = 'Registrar Nuevo Usuario';
-        document.getElementById('cliente-id').value = '';
-        formCliente.reset();
-        modalCliente.style.display = 'flex';
-    });
+    if (btnNuevoUsuario) {
+        btnNuevoUsuario.addEventListener('click', function() {
+            if (tituloModalUsuario) tituloModalUsuario.textContent = 'Registrar Nuevo Usuario';
+            
+            const usuarioId = document.getElementById('usuario-id');
+            if (usuarioId) usuarioId.value = '';
+            
+            if (formUsuario) formUsuario.reset();
+            if (modalUsuario) modalUsuario.style.display = 'flex';
+        });
+    }
 
     // Botón para cancelar formulario usuario
-    cancelarCliente.addEventListener('click', function() {
-        modalCliente.style.display = 'none';
-        formCliente.reset();
-    });
-
-
-
-
-
-
-
-
-    // Añadir event listener para cerrar sesión
-btnCerrarSesion.addEventListener('click', function() {
-    if (confirm('¿Está seguro que desea cerrar sesión?')) {
-        // Eliminar el token del localStorage
-        localStorage.removeItem('token');
-        // Redirigir al login
-        window.location.href = '/frontend/index.html';
+    if (cancelarUsuario) {
+        cancelarUsuario.addEventListener('click', function() {
+            if (modalUsuario) modalUsuario.style.display = 'none';
+            if (formUsuario) formUsuario.reset();
+        });
     }
-});
 
-    
+    // Botón para cerrar sesión
+    if (btnCerrarSesion) {
+        btnCerrarSesion.addEventListener('click', function() {
+            if (confirm('¿Está seguro que desea cerrar sesión?')) {
+                // Eliminar el token del localStorage
+                localStorage.removeItem('token');
+                // Redirigir al login
+                window.location.href = '/frontend/index.html';
+            }
+        });
+    }
 
     // Funciones de gestión de productos
     async function renderizarProductos() {
@@ -376,7 +426,7 @@ btnCerrarSesion.addEventListener('click', function() {
         }
     
         // Limpiar contenedores
-        const categorias = ['bicicletas', 'ropa_deportiva', 'equipamiento', 'suplementos', 'accesorios'];
+        const categorias = ['bicicletas', 'accesorios', 'repuestos', 'ropa_deportiva'];
         
         categorias.forEach(categoria => {
             const contenedor = document.getElementById(`productos-${categoria}`);
@@ -429,7 +479,7 @@ btnCerrarSesion.addEventListener('click', function() {
         configurarAccionesProductos();
     }
     
-    // Modificar la función de ver detalles del producto
+    // Configuración de acciones para productos
     function configurarAccionesProductos() {
         // Botones de ver detalles de producto
         document.querySelectorAll('.btn-ver-producto').forEach(btn => {
@@ -441,31 +491,33 @@ btnCerrarSesion.addEventListener('click', function() {
                     return;
                 }
     
-                detalleProductoContenido.innerHTML = `
-                <div class="detalle-producto">
-                  <div class="detalle-imagen">
-                    <img src="${API_BASE}/uploads/productos/${producto.imagen}" alt="${producto.nombre}">
-                  </div>
-                  <div class="detalle-info">
-                    <h2>${producto.nombre}</h2>
-                    <p class="marca"><strong>Marca:</strong> ${producto.marca || 'Sin especificar'}</p>
-                    <p class="descripcion">${producto.descripcion}</p>
-                    <div class="detalle-precio">
-                      <span>Precio: $${producto.precio.toLocaleString()} COP</span>
-                      <span class="disponibilidad ${producto.disponibilidad}">
-                        ${producto.disponibilidad === 'disponible' ? 'Disponible' :
-                        producto.disponibilidad === 'agotado' ? 'Agotado' : 'Próxima Llegada'}
-                      </span>
-                      <span class="stock">Stock: ${producto.stock || 0} unidades</span>
+                if (detalleProductoContenido && modalDetalleProducto) {
+                    detalleProductoContenido.innerHTML = `
+                    <div class="detalle-producto">
+                      <div class="detalle-imagen">
+                        <img src="${API_BASE}/uploads/productos/${producto.imagen}" alt="${producto.nombre}">
+                      </div>
+                      <div class="detalle-info">
+                        <h2>${producto.nombre}</h2>
+                        <p class="marca"><strong>Marca:</strong> ${producto.marca || 'Sin especificar'}</p>
+                        <p class="descripcion">${producto.descripcion}</p>
+                        <div class="detalle-precio">
+                          <span>Precio: $${producto.precio.toLocaleString()} COP</span>
+                          <span class="disponibilidad ${producto.disponibilidad}">
+                            ${producto.disponibilidad === 'disponible' ? 'Disponible' :
+                            producto.disponibilidad === 'agotado' ? 'Agotado' : 'Próxima Llegada'}
+                          </span>
+                          <span class="stock">Stock: ${producto.stock || 0} unidades</span>
+                        </div>
+                        <div class="caracteristicas">
+                          <h3>Características Técnicas</h3>
+                          <pre>${producto.caracteristicas}</pre>
+                        </div>
+                      </div>
                     </div>
-                    <div class="caracteristicas">
-                      <h3>Características Técnicas</h3>
-                      <pre>${producto.caracteristicas}</pre>
-                    </div>
-                  </div>
-                </div>
-              `;
-                modalDetalleProducto.style.display = 'flex';
+                  `;
+                    modalDetalleProducto.style.display = 'flex';
+                }
             });
         });
     
@@ -479,31 +531,45 @@ btnCerrarSesion.addEventListener('click', function() {
                     return;
                 }
     
+                // Verificar si los elementos existen antes de asignar valores
+                const productoId = document.getElementById('producto-id');
+                const productoNombre = document.getElementById('producto-nombre');
+                const productoCategoria = document.getElementById('producto-categoria');
+                const productoMarca = document.getElementById('producto-marca');
+                const productoPrecio = document.getElementById('producto-precio');
+                const productoStock = document.getElementById('producto-stock');
+                const productoDisponibilidad = document.getElementById('producto-disponibilidad');
+                const productoDescripcion = document.getElementById('producto-descripcion');
+                const productoCaracteristicas = document.getElementById('producto-caracteristicas');
+    
                 // Llenar formulario
-                document.getElementById('producto-id').value = producto.id;
-                document.getElementById('producto-nombre').value = producto.nombre;
-                document.getElementById('producto-categoria').value = producto.categoria;
-                document.getElementById('producto-marca').value = producto.marca || '';
-                document.getElementById('producto-precio').value = producto.precio;
-                document.getElementById('producto-stock').value = producto.stock || 0;
-                document.getElementById('producto-disponibilidad').value = producto.disponibilidad;
-                document.getElementById('producto-descripcion').value = producto.descripcion;
-                document.getElementById('producto-caracteristicas').value = producto.caracteristicas;
+                if (productoId) productoId.value = producto.id;
+                if (productoNombre) productoNombre.value = producto.nombre;
+                if (productoCategoria) productoCategoria.value = producto.categoria;
+                if (productoMarca) productoMarca.value = producto.marca || '';
+                if (productoPrecio) productoPrecio.value = producto.precio;
+                if (productoStock) productoStock.value = producto.stock || 0;
+                if (productoDisponibilidad) productoDisponibilidad.value = producto.disponibilidad;
+                if (productoDescripcion) productoDescripcion.value = producto.descripcion;
+                if (productoCaracteristicas) productoCaracteristicas.value = producto.caracteristicas;
     
                 // Cambiar título del modal
-                tituloCModalProducto.textContent = 'Editar Producto';
+                if (tituloModalProducto) tituloModalProducto.textContent = 'Editar Producto';
     
                 // Mostrar modal
-                modalProducto.style.display = 'flex';
+                if (modalProducto) modalProducto.style.display = 'flex';
             });
         });
     }
 
     // Cerrar modales con X
     document.querySelectorAll('.cerrar-modal').forEach(btn => {
-        btn.addEventListener('click', function () {
-            this.closest('.modal').style.display = 'none';
-        });
+        if (btn) {
+            btn.addEventListener('click', function () {
+                const modal = this.closest('.modal');
+                if (modal) modal.style.display = 'none';
+            });
+        }
     });
 
     // Cerrar modal al hacer clic fuera
@@ -513,16 +579,7 @@ btnCerrarSesion.addEventListener('click', function() {
         }
     });
 
-    // Función para mostrar notificaciones
-    function mostrarNotificacion(mensaje, tipo) {
-        notificacion.textContent = mensaje;
-        notificacion.className = `notificacion ${tipo}`;
-        notificacion.style.display = 'block';
 
-        setTimeout(() => {
-            notificacion.style.display = 'none';
-        }, 3000);
-    }
 
     // Función para obtener productos
     async function fetchProductos() {
@@ -559,97 +616,422 @@ btnCerrarSesion.addEventListener('click', function() {
         }
     }
 
-    // Modificar el submit del formulario de productos
-    formProducto.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    if (cancelarProducto) {
+        cancelarProducto.addEventListener('click', function() {
+            if (modalProducto) modalProducto.style.display = 'none';
+            if (formProducto) formProducto.reset();
+        });
+    }
     
-        // Validar campos requeridos
-        const camposRequeridos = [
-            'producto-nombre',
-            'producto-categoria',
-            'producto-marca',
-            'producto-precio',
-            'producto-stock',
-            'producto-disponibilidad'
-        ];
-    
-        let faltantes = [];
-        camposRequeridos.forEach(id => {
-            const elemento = document.getElementById(id);
-            if (!elemento.value) {
-                faltantes.push(elemento.previousElementSibling.textContent);
+    // Asegurarte de que el evento submit del formulario de productos esté bien configurado
+    if (formProducto) {
+        formProducto.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Esto previene que el formulario se envíe de manera predeterminada
+            
+            // Validar campos requeridos
+            const camposRequeridos = [
+                'producto-nombre',
+                'producto-categoria',
+                'producto-marca',
+                'producto-precio',
+                'producto-stock',
+                'producto-disponibilidad'
+            ];
+        
+            let faltantes = [];
+            camposRequeridos.forEach(id => {
+                const elemento = document.getElementById(id);
+                if (elemento && !elemento.value) {
+                    const label = elemento.previousElementSibling;
+                    faltantes.push(label ? label.textContent : id);
+                }
+            });
+        
+            if (faltantes.length > 0) {
+                mostrarNotificacion(`Faltan campos: ${faltantes.join(', ')}`, 'error');
+                return;
+            }
+        
+            // Configurar FormData correctamente
+            const formData = new FormData(formProducto);
+            
+            // Si hay un id, asegurar que se incluya para updates
+            const productoId = document.getElementById('producto-id');
+            if (productoId && productoId.value) {
+                formData.append('id', productoId.value);
+            }
+        
+            // Validar que campos numéricos tengan valores apropiados
+            const precio = parseFloat(formData.get('precio'));
+            const stock = parseInt(formData.get('stock'));
+            
+            if (isNaN(precio) || precio <= 0) {
+                mostrarNotificacion('El precio debe ser un número positivo', 'error');
+                return;
+            }
+            
+            if (isNaN(stock) || stock < 0) {
+                mostrarNotificacion('El stock debe ser un número mayor o igual a cero', 'error');
+                return;
+            }
+        
+            // Enviar al backend
+            try {
+                const url = (productoId && productoId.value) ? 
+                    `${API_BASE}/api/productos/${productoId.value}` : 
+                    `${API_BASE}/api/productos`;
+                    
+                const method = (productoId && productoId.value) ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: formData
+                });
+        
+                if (!response.ok) {
+                    const contentType = response.headers.get("content-type");
+                    if (contentType && contentType.indexOf("application/json") !== -1) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Error en la operación');
+                    } else {
+                        const errorText = await response.text();
+                        console.error('Respuesta no JSON:', errorText);
+                        throw new Error('Error del servidor: Respuesta no válida');
+                    }
+                }
+        
+                mostrarNotificacion(`Producto ${(productoId && productoId.value) ? 'actualizado' : 'creado'} exitosamente`, 'success');
+                
+                // Actualiza la lista de productos consultando el backend:
+                await renderizarProductos();
+                
+                // Cerrar el modal y resetear el formulario
+                if (modalProducto) modalProducto.style.display = 'none';
+                formProducto.reset();
+        
+            } catch (error) {
+                mostrarNotificacion(error.message, 'error');
+                console.error('Error:', error);
             }
         });
-    
-        if (faltantes.length > 0) {
-            mostrarNotificacion(`Faltan campos: ${faltantes.join(', ')}`, 'error');
-            return;
-        }
-    
-        // Configurar FormData correctamente
-        const formData = new FormData(formProducto);
-        
-        // Si hay un id, aseguramos que se incluya en el FormData para updates
-        const productoId = document.getElementById('producto-id').value;
-        if (productoId) {
-            formData.append('id', productoId);
-        }
-    
-        // Validar que campos numéricos tengan valores apropiados
-        const precio = parseFloat(formData.get('precio'));
-        const stock = parseInt(formData.get('stock'));
-        
-        if (isNaN(precio) || precio <= 0) {
-            mostrarNotificacion('El precio debe ser un número positivo', 'error');
-            return;
-        }
-        
-        if (isNaN(stock) || stock < 0) {
-            mostrarNotificacion('El stock debe ser un número mayor o igual a cero', 'error');
-            return;
-        }
-    
-        // Enviar al backend
-        try {
-            const url = productoId ? 
-                `${API_BASE}/api/productos/${productoId}` : 
-                `${API_BASE}/api/productos`;
-                
-            const method = productoId ? 'PUT' : 'POST';
-            
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: formData
-            });
-    
-            if (!response.ok) {
-                const contentType = response.headers.get("content-type");
-                if (contentType && contentType.indexOf("application/json") !== -1) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Error en la operación');
-                } else {
-                    const errorText = await response.text();
-                    console.error('Respuesta no JSON:', errorText);
-                    throw new Error('Error del servidor: Respuesta no válida');
-                }
-            }
-    
-            mostrarNotificacion(`Producto ${productoId ? 'actualizado' : 'creado'} exitosamente`, 'success');
-            // Actualiza la lista de productos consultando el backend:
-            await renderizarProductos();
-            modalProducto.style.display = 'none';
-            formProducto.reset();
-    
-        } catch (error) {
-            mostrarNotificacion(error.message, 'error');
-            console.error('Error:', error);
-        }
-    });
+    }
 
-    // Inicializar la aplicación
-    renderizarUsuarios();
-    renderizarProductos();
+
+
+
+
+
+    // /* ===================== VENTAS ===================== */
+
+ // Función para actualizar el resumen de ventas
+ async function actualizarResumenVentas(fechaInicio, fechaFin) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_BASE}/api//ventas/historial?fechaInicio=${fechaInicio || ''}&fechaFin=${fechaFin || ''}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+        const ventas = await response.json();
+        
+        // Cálculos de totales
+        const totalVentas = ventas.length;
+        const totalIngresos = ventas.reduce((sum, venta) => sum + parseFloat(venta.monto_total), 0);
+        const totalProductos = ventas.reduce((sum, venta) => 
+            sum + venta.productos.reduce((prodSum, producto) => prodSum + producto.cantidad, 0), 0);
+
+        // Actualizar DOM
+        const elementTotalVentas = document.getElementById('total-ventas');
+        const elementTotalIngresos = document.getElementById('total-ingresos');
+        const elementTotalProductos = document.getElementById('total-productos');
+        
+        if (elementTotalVentas) elementTotalVentas.textContent = totalVentas;
+        if (elementTotalIngresos) elementTotalIngresos.textContent = `$${totalIngresos.toLocaleString()}`;
+        if (elementTotalProductos) elementTotalProductos.textContent = totalProductos;
+        
+        // Actualizar tabla
+        const tbody = document.getElementById('ventas-tbody');
+        if (tbody) {
+            tbody.innerHTML = ventas.map(venta => `
+                <tr>
+                    <td>${venta.id}</td>
+                    <td>${new Date(venta.fecha_pedido).toLocaleDateString()}</td>
+                    <td>${venta.direccion_envio}</td>
+                    <td>
+                        <ul>${venta.productos.map(p => 
+                            `<li>${p.producto_nombre} (${p.cantidad}x $${p.precio_unitario})</li>`
+                        ).join('')}</ul>
+                    </td>
+                    <td>$${venta.monto_total}</td>
+                    <td>
+                        <button class="btn-ver-detalle" data-id="${venta.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                </tr>
+            `).join('');
+             // Agregar este bloque nuevo
+             document.querySelectorAll('.btn-ver-detalle').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    mostrarNotificacion('🔧 La función de detalle de ventas está en desarrollo', 'info');
+                });
+            });
+        
+        
+        }
+        
+    } catch (error) {
+        console.error('Error actualizando resumen:', error);
+        mostrarNotificacion('Error al cargar datos de ventas: ' + error.message, 'error');
+    }
+}
+
+// Función para productos más vendidos
+async function cargarProductosMasVendidos(periodo) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_BASE}/api/ventas/productos-mas-vendidos?periodo=${periodo || 'mes'}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+        const productos = await response.json();
+        
+        const contenedor = document.querySelector('.productos-top-categorias');
+        if (contenedor) {
+            contenedor.innerHTML = productos.map((producto, index) => `
+                <div class="categoria-container">
+                    <h3>${index + 1}. ${producto.producto_nombre}</h3>
+                    <table class="tabla-productos">
+                        <tr>
+                            <th>Unidades Vendidas</th>
+                            <th>Precio Unitario</th>
+                            <th>Ingreso Total</th>
+                        </tr>
+                        <tr>
+                            <td>${producto.total_vendido}</td>
+                            <td>$${producto.precio}</td>
+                            <td>$${(producto.total_vendido * producto.precio).toLocaleString()}</td>
+                        </tr>
+                    </table>
+                </div>
+            `).join('');
+        }
+        
+    } catch (error) {
+        console.error('Error cargando productos vendidos:', error);
+        mostrarNotificacion('Error al cargar productos: ' + error.message, 'error');
+    }
+}
+
+// Event listeners para los filtros
+const btnFiltrarVentas = document.getElementById('btn-filtrar-ventas');
+if (btnFiltrarVentas) {
+    btnFiltrarVentas.addEventListener('click', () => {
+        const fechaInicio = document.getElementById('fecha-inicio').value;
+        const fechaFin = document.getElementById('fecha-fin').value;
+        actualizarResumenVentas(fechaInicio, fechaFin);
+    });
+}
+
+const btnFiltrarProductos = document.getElementById('btn-filtrar-productos');
+if (btnFiltrarProductos) {
+    btnFiltrarProductos.addEventListener('click', () => {
+        const periodo = document.getElementById('periodo-vendidos').value;
+        cargarProductosMasVendidos(periodo);
+    });
+}
+
+// Agregar este código al final de tu archivo script_admi.js, dentro del event listener 'DOMContentLoaded'
+
+// ====== CORRECCIÓN PARA LA SECCIÓN DE VENTAS Y PRODUCTOS MÁS VENDIDOS ======
+
+// 1. Corregir ID de sección - asegurar que usamos el nombre correcto del ID
+const ventasSection = document.getElementById('ventas-section');
+
+// 2. Configurar eventos para las pestañas de ventas
+const ventasTabs = document.querySelectorAll('.ventas-tab');
+const ventasContent = document.querySelectorAll('.ventas-content');
+
+// Función para cambiar entre pestañas
+function cambiarPestanaVentas() {
+    // Desactivar todas las pestañas y contenidos
+    ventasTabs.forEach(tab => tab.classList.remove('active'));
+    ventasContent.forEach(content => content.classList.remove('active'));
+    
+    // Activar la pestaña seleccionada
+    this.classList.add('active');
+    
+    // Mostrar el contenido correspondiente
+    const tabId = this.getAttribute('data-tab');
+    const contenidoActivo = document.getElementById(tabId);
+    if (contenidoActivo) {
+        contenidoActivo.classList.add('active');
+        
+        // Cargar datos específicos según la pestaña
+        if (tabId === 'productos-vendidos') {
+            const periodoSeleccionado = document.getElementById('periodo-vendidos').value;
+            cargarProductosMasVendidos(periodoSeleccionado);
+        } else if (tabId === 'historial-ventas') {
+            actualizarResumenVentas();
+        }
+    }
+}
+
+// Asignar eventos a las pestañas
+ventasTabs.forEach(tab => {
+    tab.addEventListener('click', cambiarPestanaVentas);
 });
+
+// 3. Corregir la inicialización de la sección de ventas
+menuBtns.forEach(btn => {
+    if (btn.dataset.section === 'ventas-section') {
+        btn.addEventListener('click', function() {
+            console.log('Inicializando sección de ventas');
+            // Inicializar con la primera pestaña activa
+            const primeraPestana = document.querySelector('.ventas-tab');
+            if (primeraPestana) {
+                primeraPestana.click(); // Simular click en la primera pestaña
+            }
+        });
+    }
+});
+
+// 4. Mejorar la función de carga de productos más vendidos con mejor manejo de errores
+function cargarProductosMasVendidos(periodo) {
+    try {
+        console.log('Cargando productos más vendidos con periodo:', periodo);
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+            console.error('No hay token de autenticación disponible');
+            mostrarNotificacion('Error de autenticación. Por favor inicie sesión nuevamente.', 'error');
+            return;
+        }
+        
+        // Mostrar indicador de carga
+        const contenedor = document.querySelector('.productos-top-categorias');
+        if (contenedor) {
+            contenedor.innerHTML = '<div class="cargando">Cargando productos más vendidos...</div>';
+        }
+        
+        const url = `${API_BASE}/api/ventas/productos-mas-vendidos${periodo ? `?periodo=${periodo}` : ''}`;
+        console.log('URL de consulta productos vendidos:', url);
+        
+        fetch(url, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`Error en servidor: ${text}`);
+                });
+            }
+            return response.json();
+        })
+        .then(productos => {
+            console.log('Productos más vendidos recibidos:', productos);
+            
+            if (contenedor) {
+                if (!productos || productos.length === 0) {
+                    contenedor.innerHTML = '<div class="alerta-info">No hay datos de ventas para mostrar en este periodo.</div>';
+                    return;
+                }
+                
+                contenedor.innerHTML = productos.map((producto, index) => `
+                    <div class="categoria-container">
+                        <h3>${index + 1}. ${producto.producto_nombre || 'Producto sin nombre'}</h3>
+                        <table class="tabla-productos">
+                            <tr>
+                                <th>Unidades Vendidas</th>
+                                <th>Precio Unitario</th>
+                                <th>Ingreso Total</th>
+                            </tr>
+                            <tr>
+                                <td>${producto.total_vendido || 0}</td>
+                                <td>$${producto.precio ? parseFloat(producto.precio).toLocaleString() : 0}</td>
+                                <td>$${((producto.total_vendido || 0) * (producto.precio || 0)).toLocaleString()}</td>
+                            </tr>
+                        </table>
+                    </div>
+                `).join('');
+            }
+        })
+        .catch(error => {
+            console.error('Error cargando productos vendidos:', error);
+            mostrarNotificacion('Error al cargar productos: ' + error.message, 'error');
+            
+            if (contenedor) {
+                contenedor.innerHTML = '<div class="error-mensaje">Error al cargar datos. Intente nuevamente más tarde.</div>';
+            }
+            
+            // En modo de prueba, mostrar datos de ejemplo
+            if (modoPrueba) {
+                mostrarProductosVendidosEjemplo(contenedor);
+            }
+        });
+        
+    } catch (error) {
+        console.error('Error general:', error);
+        mostrarNotificacion('Error en la aplicación: ' + error.message, 'error');
+    }
+}
+
+// Función para mostrar datos de ejemplo en modo prueba
+function mostrarProductosVendidosEjemplo(contenedor) {
+    if (!contenedor) return;
+    
+    const productosEjemplo = [
+        { producto_nombre: "Bicicleta MTB Specialized", total_vendido: 12, precio: 2500000 },
+        { producto_nombre: "Casco Fox Racing", total_vendido: 28, precio: 180000 },
+        { producto_nombre: "Set de luces LED", total_vendido: 45, precio: 75000 },
+        { producto_nombre: "Jersey de ciclismo", total_vendido: 30, precio: 120000 },
+        { producto_nombre: "Rueda Shimano 29", total_vendido: 15, precio: 350000 }
+    ];
+    
+    contenedor.innerHTML = productosEjemplo.map((producto, index) => `
+        <div class="categoria-container">
+            <h3>${index + 1}. ${producto.producto_nombre}</h3>
+            <table class="tabla-productos">
+                <tr>
+                    <th>Unidades Vendidas</th>
+                    <th>Precio Unitario</th>
+                    <th>Ingreso Total</th>
+                </tr>
+                <tr>
+                    <td>${producto.total_vendido}</td>
+                    <td>$${producto.precio.toLocaleString()}</td>
+                    <td>$${(producto.total_vendido * producto.precio).toLocaleString()}</td>
+                </tr>
+            </table>
+        </div>
+    `).join('');
+}
+
+
+// Inicializar la aplicación de administración
+renderizarUsuarios();
+renderizarProductos();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

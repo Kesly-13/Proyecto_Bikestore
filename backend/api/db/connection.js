@@ -7,6 +7,7 @@ const conexion = mysql.createConnection({
     password: 'bura12325',
     database: 'bike_store',
     port: 3307
+    // debug: true
 });
 
 // Función para la conexión y la reconexión

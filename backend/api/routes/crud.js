@@ -1,4 +1,3 @@
-// crud.js
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
@@ -93,6 +92,109 @@ function eliminar(tabla, id) {
 
 // Ruta para crear producto
 // routes/crud.js (modifica la ruta POST)
+
+// Ruta para obtener el historial de ventas con filtros de fecha
+router.get('/ventas/historial', verifyToken, isAdmin, async (req, res) => {
+  try {
+      const { fechaInicio, fechaFin } = req.query;
+      
+      let query = `
+          SELECT v.*, p.fecha_pedido, p.direccion_envio, p.metodo_pago 
+          FROM ventas v
+          JOIN pedidos p ON v.pedido_id = p.id
+          WHERE 1=1
+      `;
+      const params = [];
+
+      if (fechaInicio && fechaFin) {
+          query += ' AND p.fecha_pedido BETWEEN ? AND ?';
+          params.push(fechaInicio, fechaFin + ' 23:59:59');
+      }
+
+      const [ventas] = await conexion.promise().query(query, params);
+      
+      // Obtener detalles de cada venta
+      for (const venta of ventas) {
+          const [detalles] = await conexion.promise().query(
+              'SELECT producto_nombre, cantidad, precio_unitario FROM detalle_pedidos WHERE pedido_id = ?',
+              [venta.pedido_id]
+          );
+          venta.productos = detalles;
+      }
+
+      res.json(ventas);
+  } catch (error) {
+      console.error('Error al obtener historial de ventas:', error);
+      res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+// Ruta para obtener productos más vendidos
+// En crud.js 
+router.get('/ventas/productos-mas-vendidos', verifyToken, isAdmin, async (req, res) => {
+  try {
+      const { periodo } = req.query;
+      let fechaFiltro = new Date();
+      
+      switch (periodo) {
+        case 'mes': 
+          fechaFiltro.setMonth(fechaFiltro.getMonth() - 1);
+          break;
+        case 'trimestre': 
+          fechaFiltro.setMonth(fechaFiltro.getMonth() - 3);
+          break;
+        case 'semestre': 
+          fechaFiltro.setMonth(fechaFiltro.getMonth() - 6);
+          break;
+        case 'anio': 
+          fechaFiltro.setFullYear(fechaFiltro.getFullYear() - 1);
+          break;
+        default: 
+          fechaFiltro = null;
+      }
+
+      let query = `
+  SELECT 
+    dp.producto_id,
+    ANY_VALUE(dp.producto_nombre) AS producto_nombre,
+    SUM(dp.cantidad) AS total_vendido,
+    ANY_VALUE(p.imagen) AS imagen,
+    ANY_VALUE(p.precio) AS precio
+  FROM detalle_pedidos dp
+  JOIN pedidos pe ON dp.pedido_id = pe.id
+  JOIN productos p ON dp.producto_id = p.id
+  ${fechaFiltro ? 'WHERE pe.fecha_pedido >= ?' : ''}
+  GROUP BY dp.producto_id
+  ORDER BY total_vendido DESC
+  LIMIT 10
+`;
+
+      const params = fechaFiltro ? [fechaFiltro.toISOString().split('T')[0]] : [];
+      
+      const [resultados] = await conexion.promise().query(query, params);
+      res.json(resultados);
+  } catch (error) {
+      console.error('Error al obtener productos más vendidos:', error);
+      res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Ruta para crear producto
 router.post('/productos', verifyToken, isAdmin, upload.single('imagen'), (req, res) => {
   console.log('Archivo recibido:', req.file);
@@ -100,10 +202,9 @@ router.post('/productos', verifyToken, isAdmin, upload.single('imagen'), (req, r
   
   const categoriasPermitidas = [
       'bicicletas',
-      'ropa_deportiva', 
-      'equipamiento',
-      'suplementos',
-      'accesorios'
+  'accesorios',
+  'repuestos',
+  'ropa_deportiva'
   ];
 
   if (!categoriasPermitidas.includes(req.body.categoria)) {
@@ -183,10 +284,9 @@ router.put('/productos/:id', verifyToken, isAdmin, upload.single('imagen'), (req
 
   const categoriasPermitidas = [
     'bicicletas',
-    'ropa_deportiva',
-    'equipamiento',
-    'suplementos',
-    'accesorios'
+  'accesorios',
+  'repuestos',
+  'ropa_deportiva'
   ];
 
   if (!categoriasPermitidas.includes(req.body.categoria)) {
@@ -224,10 +324,9 @@ router.put('/productos/:id', verifyToken, isAdmin, upload.single('imagen'), (req
 router.get('/productos', (req, res) => {
   const categoriasValidas = [
       'bicicletas',
-      'ropa_deportiva',
-      'equipamiento',
-      'suplementos',
-      'accesorios'
+  'accesorios',
+  'repuestos',
+  'ropa_deportiva'
   ];
   
   if (req.query.categoria && !categoriasValidas.includes(req.query.categoria)) {
@@ -329,63 +428,22 @@ router.get('/productos/filtrar', verifyToken, (req, res) => {
 
 // Rutas CRUD
 
-// Obtener todos los registros de una tabla (Solo usuarios autenticados)
-router.get('/:tabla', verifyToken, async (req, res) => {
-  try {
-    const resultados = await obtenerTodos(req.params.tabla);
-    res.send(resultados);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
 
-// Obtener un registro por ID (Solo usuarios autenticados)
-router.get('/:tabla/:id', verifyToken, async (req, res) => {
-  try {
-    const resultado = await obtenerUno(req.params.tabla, req.params.id);
-    res.send(resultado);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
-// Crear un nuevo registro (Solo administradores)
-router.post('/:tabla', verifyToken, isAdmin, async (req, res) => {
-  try {
-    const resultado = await crear(req.params.tabla, req.body);
-    res.send(resultado);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
-// Actualizar un registro por ID (Solo administradores)
-router.put('/:tabla/:id', verifyToken, isAdmin, async (req, res) => {
-  try {
-    const resultado = await actualizar(req.params.tabla, req.params.id, req.body);
-    res.send(resultado);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
-// Eliminar un registro por ID (Solo administradores)
-router.delete('/:tabla/:id', verifyToken, isAdmin, async (req, res) => {
-  try {
-    const resultado = await eliminar(req.params.tabla, req.params.id);
-    res.send(resultado);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
+// // Crear un nuevo registro (Solo administradores)
+// router.post('/:tabla', verifyToken, isAdmin, async (req, res) => {
+//   try {
+//     const resultado = await crear(req.params.tabla, req.body);
+//     res.send(resultado);
+//   } catch (error) {
+//     res.status(500).send(error);
+//   }
+// });
 
 
 
 
 
 
-
-// crud.js (modificar/agregar estas rutas)
 
 // Rutas para el carrito
 // Obtener carrito de un usuario
@@ -410,17 +468,18 @@ router.get('/cart/:userId', verifyToken, async (req, res) => {
 router.post('/cart/:userId', verifyToken, async (req, res) => {
   try {
     const userId = req.params.userId;
-    const { producto_nombre, precio, imagen, cantidad } = req.body;
+    const { producto_id, producto_nombre, precio, imagen, cantidad } = req.body; // Añade producto_nombre
 
     const query = `
-      INSERT INTO Carrito (usuario_id, producto_nombre, producto_precio, producto_imagen, cantidad)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO Carrito 
+      (usuario_id, producto_id, producto_nombre, producto_precio, producto_imagen, cantidad)
+      VALUES (?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE cantidad = ?
     `;
 
     conexion.query(
       query,
-      [userId, producto_nombre, precio, imagen, cantidad, cantidad],
+      [userId, producto_id, producto_nombre, precio, imagen, cantidad, cantidad], // Añade producto_nombre
       (error, resultado) => {
         if (error) {
           console.error(error);
@@ -540,7 +599,164 @@ router.get('/productos/validar/:id', (req, res) => {
 
 
 
+router.post('/checkout', verifyToken, async (req, res) => {
+  const userId = req.userId; // Modificado: usar req.userId en lugar de req.user.id
+  const { direccion, metodo_pago, notas, info_contacto, items, total } = req.body;
+
+  console.log('Recibido checkout con items:', items);
+
+  // Validar que hay items en el carrito
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: 'El carrito está vacío' });
+  }
+
+  // Validar campos obligatorios
+  if (!direccion) {
+    return res.status(400).json({ error: 'La dirección de envío es obligatoria' });
+  }
+
+  if (!metodo_pago) {
+    return res.status(400).json({ error: 'El método de pago es obligatorio' });
+  }
+
+  try {
+    // Iniciar transacción para asegurar integridad de datos
+    await conexion.promise().beginTransaction();
+
+    // 1. Crear el pedido
+    const pedidoQuery = `
+      INSERT INTO pedidos 
+      (usuario_id, direccion_envio, metodo_pago, total, notas, info_contacto)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `;
+    
+    const [pedidoResult] = await conexion.promise().query(pedidoQuery, [
+      userId,
+      direccion,
+      metodo_pago,
+      total || 0,
+      notas || null,
+      info_contacto ? JSON.stringify(info_contacto) : null
+    ]);
+
+    const pedidoId = pedidoResult.insertId;
+
+    // 2. Crear detalles del pedido
+    if (items.length > 0) {
+      const detalleQuery = `
+        INSERT INTO detalle_pedidos 
+        (pedido_id, producto_id, producto_nombre, cantidad, precio_unitario, subtotal)
+        VALUES ?
+      `;
+      
+      const detalleValues = items.map(item => [
+        pedidoId,
+        item.id || null,
+        item.nombre,
+        item.cantidad || 1,
+        parseFloat(item.precio) || 0,
+        (parseFloat(item.precio) || 0) * (item.cantidad || 1)
+      ]);
+
+      await conexion.promise().query(detalleQuery, [detalleValues]);
+    }
+
+    // 3. Crear registro de venta
+    const ventaQuery = `
+      INSERT INTO ventas 
+      (pedido_id, monto_total, impuestos, monto_neto)
+      VALUES (?, ?, ?, ?)
+    `;
+    
+    const impuestos = total * 0.19;
+    const neto = total - impuestos;
+    
+    await conexion.promise().query(ventaQuery, [
+      pedidoId,
+      total || 0,
+      impuestos || 0,
+      neto || 0
+    ]);
+
+    // 4. Vaciar carrito
+    await conexion.promise().query('DELETE FROM Carrito WHERE usuario_id = ?', [userId]);
+
+    // Confirmar transacción
+    await conexion.promise().commit();
+
+    res.json({
+      success: true,
+      orderId: pedidoId,
+      total: total || 0
+    });
+
+  } catch (error) {
+    // Revertir transacción en caso de error
+    await conexion.promise().rollback();
+    console.error('Error en checkout:', error);
+    res.status(500).json({ error: 'Error al procesar el pedido', details: error.message });
+  }
+});
 
 
+
+// === Rutas CRUD genéricas ===
+
+// Definir un array de tablas permitidas para las rutas CRUD genéricas
+const tablasPermitidas = ['Productos', 'Carrito', 'Favoritos', 'pedidos', 'detalle_pedidos', 'ventas'];
+
+
+
+// Obtener todos los registros de una tabla (Solo usuarios autenticados)
+router.get('/:tabla', verifyToken, async (req, res) => {
+  try {
+    const resultados = await obtenerTodos(req.params.tabla);
+    res.send(resultados);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Obtener un registro por ID (Solo usuarios autenticados)
+router.get('/:tabla/:id', verifyToken, async (req, res) => {
+  try {
+    const resultado = await obtenerUno(req.params.tabla, req.params.id);
+    res.send(resultado);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
+// Crear un nuevo registro (Solo administradores)
+router.post('/:tabla', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const resultado = await crear(req.params.tabla, req.body);
+    res.send(resultado);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
+// Actualizar un registro por ID (Solo administradores)
+router.put('/:tabla/:id', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const resultado = await actualizar(req.params.tabla, req.params.id, req.body);
+    res.send(resultado);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Eliminar un registro por ID (Solo administradores)
+router.delete('/:tabla/:id', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const resultado = await eliminar(req.params.tabla, req.params.id);
+    res.send(resultado);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
 module.exports = router;

@@ -86,18 +86,6 @@ header.scrolled .logo {
   color: #e74c3c; /* Fucsia oscuro */
 }
 
-/* Estilo para la burbuja de notificación */
-/* .badge {
-    background: #ff8800;
-    color: white;
-    font-size: 12px;
-    border-radius: 50%;
-    padding: 5px 8px;
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    font-weight: bold;
-  } */
   
   .badge {
     position: absolute;
@@ -213,6 +201,12 @@ footer {
   color: #fff;
   padding: 40px 20px;
   margin-top: 20px;
+}
+
+.footer-links img{
+  width: 120px;
+  font-size: 24px;
+  margin-left: 20px;
 }
 
 .footer-content {

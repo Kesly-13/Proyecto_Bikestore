@@ -7,8 +7,9 @@ import { actualizarCarritoEnBD } from './syncManager.js';
 
 export function initCarrito() {
   document.querySelectorAll('.add-to-cart, .release-button').forEach(button => {
-    button.addEventListener('click', () => {
-      const productCard = button.closest('.product-card, .release-card');
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      const productCard = this.closest('.product-card, .release-card');
       
       // Obtener datos incluyendo el ID
       const productId = button.getAttribute('data-id'); // 🆕 Nueva línea
@@ -55,26 +56,18 @@ export function agregarAlCarrito(producto) {
   }
   
   // Verificar si el producto ya está en el carrito
-  const productoExistente = carrito.findIndex(item => item.nombre === producto.nombre);
-  
+  const productoExistente = carrito.findIndex(item => item.id === producto.id);
+
   if (productoExistente !== -1) {
-    // Si el producto ya existe, incrementamos la cantidad
-    carrito[productoExistente].cantidad = (carrito[productoExistente].cantidad || 1) + 1;
-    
-    // Asegurarnos de que tenga ID (por si se agregó antes sin ID)
-    if (producto.id && !carrito[productoExistente].id) {
-      carrito[productoExistente].id = producto.id;
-    }
+    carrito[productoExistente].cantidad += 1;
+    mostrarMensaje(`${producto.nombre} ya está en el carrito (${carrito[productoExistente].cantidad} unidades)`, 2000); // Mensaje actualizado
   } else {
-    // Si es un producto nuevo, lo agregamos al carrito con cantidad 1
-    carrito.push({
-      id: producto.id, // Asegurarnos de incluir el ID
-      nombre: producto.nombre,
-      precio: producto.precio,
-      imagen: producto.imagen,
-      cantidad: 1
-    });
+    carrito.push({ ...producto, cantidad: 1 });
+    mostrarMensaje(`${producto.nombre} agregado al carrito`, 2000); // Mensaje nuevo
   }
+
+  localStorage.setItem('carrito', JSON.stringify(carrito));
+  actualizarContadorCarrito();
   
   // Guardar el carrito actualizado
   localStorage.setItem('carrito', JSON.stringify(carrito));

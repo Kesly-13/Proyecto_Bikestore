@@ -29,16 +29,16 @@
           <div class="form-section">
             <h2>Información de Contacto</h2>
             <div class="form-group">
-              <label for="nombre">Nombre completo</label>
-              <input type="text" id="nombre" name="nombre" required>
+              <label for="checkout-nombre">Nombre completo</label>
+              <input type="text" id="checkout-nombre" name="nombre" required>
             </div>
             <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" required>
+              <label for="checkout-email">Email</label>
+              <input type="email" id="checkout-email" name="email" required>
             </div>
             <div class="form-group">
-              <label for="telefono">Teléfono</label>
-              <input type="tel" id="telefono" name="telefono" required>
+              <label for="checkout-telefono">Teléfono</label>
+              <input type="tel" id="checkout-telefono" name="telefono" required>
             </div>
           </div>
 
@@ -46,8 +46,8 @@
           <div class="form-section">
             <h2>Dirección de Envío</h2>
             <div class="form-group">
-              <label for="direccion">Dirección</label>
-              <input type="text" id="direccion" name="direccion" required>
+              <label for="checkout-direccion">Dirección</label>
+              <input type="text" id="checkout-direccion" name="direccion" required>
             </div>
             <div class="form-group">
               <label for="ciudad">Ciudad</label>
@@ -115,8 +115,8 @@
               </div>
 
               <div class="payment-option">
-                <input type="radio" id="efectivo" name="metodo_pago" value="efectivo">
-                <label for="efectivo">
+                <input type="radio" id="efectivo-fields" name="metodo_pago" value="efectivo" class="payment-details">
+                <label for="efectivo-fields">
                   <i class="fas fa-money-bill-wave"></i>
                   Pago Contra-entrega
                 </label>
@@ -172,7 +172,8 @@
           <div class="form-section">
             <h2>Notas del pedido (opcional)</h2>
             <div class="form-group">
-              <textarea id="notas" name="notas" rows="3" placeholder="Instrucciones especiales para la entrega, etc."></textarea>
+              <textarea id="notas" name="notas" rows="3"
+                placeholder="Instrucciones especiales para la entrega, etc."></textarea>
             </div>
           </div>
 

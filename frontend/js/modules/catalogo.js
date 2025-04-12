@@ -44,7 +44,7 @@ async function loadProducts(endpoint = "http://localhost:3000/api/productos") {
                     <div class="product-title">${producto.nombre}</div>
                     <div class="product-price">COP ${producto.precio.toLocaleString()}</div>
                     <div class="product-actions">
-                        <button class="add-to-cart">
+                        <button class="add-to-cart" data-id="${producto.id}">
                             <i class="fas fa-shopping-cart"></i> Agregar al carrito
                         </button>
                     </div>
